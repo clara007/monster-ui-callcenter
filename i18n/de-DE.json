@@ -1,0 +1,25 @@
+{
+	"callcenter": {
+		"hide_logged_out_agents": "abgemeldete Agenten ausblenden",
+		"hide_queues": "Anrufschleifen ausblenden",
+		"break_time": "Wartezeit",
+		"wrapping_up": "Abschluss",
+		"call_time": "Sprechzeit",
+		"busy_since": "Beschäftigt",
+		"no_active_call": "keine aktiven Anrufe",
+		"total_calls": "Anrufe",
+		"missed_calls": "Verpasst",
+		"no_active_call": "Inaktiv",
+		"current_call": "Akiv",
+		"select_the_device": "Wählen Sie das Gerät das angerufen werden soll",
+		"which_device": "Welches Gerät?",
+		"ring": "klingeln",
+		"cancel": "Abbrechen",
+		"call_waiting": "Wartende Anrufe",
+		"call_waiting_log": "Anklopf Aufzeichnung",
+		"eavesdrop_request_failed": "Antrag gescheitert. Fehler:",
+		"devices_title": "Geräte",
+		"hide_queues_html": "Warteräume ausblenden",
+		"show_queues_html": "Warteräume anzeigen"
+	}
+}
