@@ -11,6 +11,15 @@
 			"Customize the Callcenter message"
 		    ]
 		},
+                "en-NZ": {
+                    "label": "Callcentre",
+                    "description": "The Callcentre app allows you to customise routing of calls into queues.",
+                    "features": [
+                        "Add your own Callcentre",
+                        "Change your Callcentre routes",
+                        "Customise the Callcentre message"
+                    ]
+                },
 		"dk-DK": {
 		    "label": "Callcenter",
 		    "description": "The callcenters app allows you to customize routing calls per webapplication.",
