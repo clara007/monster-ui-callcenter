@@ -459,7 +459,7 @@ define(function(require){
 
         render: function(_container) {
             var self = this,
-            container = _container || $('#monster-content');
+            container = _container || $('#monster_content');
 
                 // account switching for monster-ui
                 self.accountId = monster.apps.auth.accountId;
