@@ -30,15 +30,7 @@
 
 #dashboard-content #dashboard-topbar {
     width: 100%;
-    background: transparent linear-gradient(to bottom, #326FB4 0%, #9FC7F5 25%, #CBD3FC 50%, #A9B8FB 75%, #FFF 100%) repeat scroll 0% 0%;
-    background-color: transparent;
-    background-image: linear-gradient(to bottom, #326FB4 0%, #9FC7F5 25%, #CBD3FC 50%, #A9B8FB 75%, #FFF 100%);
-    background-repeat: repeat;
-    background-attachment: scroll;
-    background-position: 0% 0%;
-    background-clip: border-box;
-    background-origin: padding-box;
-    background-size: auto auto;
+    background: white;
 }
 
 /* Top-Right queues */
@@ -47,12 +39,11 @@
 }
 
 #dashboard-content #dashboard-topbar .topbar-right .list_queues {
-    margin: 0px 20px;
+    margin: 0 20px;
     height: 200px;
     border-radius: 5px;
-    box-shadow: 1px 1px #333;
-    background: #4D4D4D;
-    border: 10px solid #324E93;
+    background: #EBEBEB;
+    border: 10px solid #E1E1E1;
 }
 
 #dashboard-content #dashboard-topbar .topbar-right .list_queues .slide {
