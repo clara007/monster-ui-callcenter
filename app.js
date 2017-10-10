@@ -11,16 +11,16 @@ var app = {
 
 	i18n: {
 		'en-US': { customCss: false },
-					'de-DE': { customCss: false },
-					'dk-DK': { customCss: false },
-					'it-IT': { customCss: false },
-					'fr-FR': { customCss: false },
-					'nl-NL': { customCss: false },
-					'ro-RO': { customCss: false },
-					'ru-RU': { customCss: false },
-					'pt-PT': { customCss: false },
-					'zh-CN': { customCss: false },
-					'es-ES': { customCss: false }
+		'de-DE': { customCss: false },
+		'dk-DK': { customCss: false },
+		'it-IT': { customCss: false },
+		'fr-FR': { customCss: false },
+		'nl-NL': { customCss: false },
+		'ro-RO': { customCss: false },
+		'ru-RU': { customCss: false },
+		'pt-PT': { customCss: false },
+		'zh-CN': { customCss: false },
+		'es-ES': { customCss: false }
 	},
 
 	load: function(callback){
@@ -46,9 +46,47 @@ var app = {
 			app: self,
 			callback: callback
 		});
+
+		Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options) {
+			var operators, result;
+
+			if (arguments.length < 3) {
+				throw new Error('Handlerbars Helper \'compare\' needs 2 parameters');
+			}
+
+			if (options === undefined) {
+				options = rvalue;
+				rvalue = operator;
+				operator = '===';
+			}
+
+			operators = {
+				'==': function (l, r) { return l == r; },
+				'===': function (l, r) { return l === r; },
+				'!=': function (l, r) { return l != r; },
+				'!==': function (l, r) { return l !== r; },
+				'<': function (l, r) { return l < r; },
+				'>': function (l, r) { return l > r; },
+				'<=': function (l, r) { return l <= r; },
+				'>=': function (l, r) { return l >= r; },
+				'typeof': function (l, r) { return typeof l == r; }
+			};
+
+			if (!operators[operator]) {
+				throw new Error('Handlerbars Helper \'compare\' doesn\'t know the operator ' + operator);
+			}
+
+			result = operators[operator](lvalue, rvalue);
+
+			if (result) {
+				return options.fn(this);
+			} else {
+				return options.inverse(this);
+			}
+
+		});
 	},
 
-	// API Calls
 	queue_eavesdrop: function (callback) {
 		var self = this;
 
@@ -62,7 +100,7 @@ var app = {
 			}
 		});
 	},
-	listDevices: function (callback) {
+/*	listDevices: function (callback) {
 		var self = this;
 
 		self.callApi({
@@ -74,7 +112,7 @@ var app = {
 				callback(devices.data);
 			}
 		});
-	},
+	},*/
 
 	poll_agents: function (global_data, _container) {
 		var self = this,
@@ -202,7 +240,7 @@ var app = {
 		});
 	},
 
-	get_queues_stats: function (callback) {
+	/*get_queues_stats: function (callback) {
 		var self = this;
 
 		self.callApi({
@@ -214,7 +252,7 @@ var app = {
 				callback(queues_stats.data);
 			}
 		});
-	},
+	},*/
 
 	get_queues: function (callback) {
 		var self = this;
@@ -244,7 +282,7 @@ var app = {
 		});
 	},
 
-	render_callwaiting_list: function (_container) {
+	/*render_callwaiting_list: function (_container) {
 		var self = this,
 			container = _container || $('#dashboard-content');
 
@@ -254,7 +292,7 @@ var app = {
 			data: []
 		});
 		$('.add_flow', container).empty().html('call_waiting_log');
-	},
+	},*/
 
 	get_time_seconds: function (seconds) {
 		var seconds = Math.floor(seconds),
@@ -469,14 +507,14 @@ var app = {
 
 		self.fetch_all_data(function(data) {
 
-			queues_html = $(monster.template(self, 'queues_dashboard', {queues: data.queues}));
-			agents_html = $(monster.template(self, 'agents_dashboard', {agents: data.agents}));
-			calls_html = $(monster.template(self, 'calls_dashboard', {progress: data.calls_in_progress, waits: data.calls_waiting} ));
+			var queues_html = $(monster.template(self, 'queues_dashboard', {queues: data.queues}));
+			var agents_html = $(monster.template(self, 'agents_dashboard', {agents: data.agents}));
+			var calls_html = $(monster.template(self, 'calls_dashboard', {progress: data.calls_in_progress, waits: data.calls_waiting} ));
 
-			html = $(monster.template(self, 'dashboard', {}));
+			var html = $(monster.template(self, 'dashboard', {}));
 			container.empty().append(html);
 
-			scroll_value = $('.topbar-right .list_queues_inner', container).scrollLeft() || 0;
+			var scroll_value = $('.topbar-right .list_queues_inner', container).scrollLeft() || 0;
 			container.find('#dashboard-view').empty().append(agents_html);
 			container.find('.topbar-right').empty().append(queues_html);
 			container.find('.topbar-right .list_queues_inner').animate({ scrollLeft: scroll_value }, 0);
@@ -489,7 +527,307 @@ var app = {
 			if(typeof queue_id != 'undefined') {
 				self.detail_stat(queue_id, container);
 			}
+
+			self.dashboardBindEvents(container);
 		});
+	},
+
+	dashboardBindEvents: function($container) {
+		var self = this;
+
+		$container.find('.js-open-cc-settings').on('click', function(e) {
+			e.preventDefault();
+			var html = $(monster.template(self, 'settings', {}));
+			$container.empty().append(html);
+			self.settingsInit($container);
+		}).click(); // TODO: remove ".click()" after development
+	},
+
+	settingsInit: function($container) {
+		var self = this;
+		self.settingsRenderList($container, function() {
+			monster.ui.tooltips($container, {
+				options: {
+					placement: 'bottom',
+					container: 'body'
+				}
+			});
+
+			self.settingsBindEvents($container);
+		});
+
+	},
+
+	settingsBindEvents: function($container) {
+		var self = this;
+
+		$container.find('.js-open-cc-dashboard').on('click', function(e) {
+			e.preventDefault();
+			self.render($container);
+		});
+
+		$container.find('.js-cc-create-queue').on('click', function(e) {
+			e.preventDefault();
+			self.settingsQueueNewInit($container);
+		});
+	},
+
+	settingsQueueNewInit: function($container) {
+		var self = this;
+		var $parent = $container.find('#cc-settings-content');
+
+		var $queuesList = $('#queues-list');
+		$queuesList.find('.active').each(function(e, i) {
+			$(this).removeClass('active');
+		});
+		$queuesList.find('.js-new-queue-item').remove();
+		$queuesList.find('.js-nav-list').append('<li class="js-new-queue-item active"><a href="#">New Queue</a></li>');
+
+		self.settingsQueueFormRender($parent);
+	},
+
+	settingsQueueFormRender: function($container, data) {
+		var self = this;
+
+		var defaultQueueData = {
+			connection_timeout: '0',
+			member_timeout: '5',
+			agent_wrapup_time: '30',
+			record_caller: true,
+			moh: {},
+			notifications: {},
+			max_queue_size: '0'
+		};
+
+		data = $.extend(true, defaultQueueData, data || {});
+/*		var data = {
+			"data": {
+				"name": "test2",
+				"record_caller": true,
+				"moh": "1880ca1c34f3ed88b4071cda175f525e",
+				"strategy": "round_robin",
+				"call_recording_url": "",
+				"agent_wrapup_time": "30",
+				"max_queue_size": "0",
+				"connection_timeout": "0",
+				"enter_when_empty": false,
+				"notifications": {
+					"hangup": "",
+					"pickup": "",
+					"method": "GET"
+				},
+
+
+				"member_timeout": "5",
+				"ui_metadata": {
+					"ui": "kazoo-ui",
+					"version": "3.22-0https://github.com/2600hz/kazoo-ui.gittags/3.22.096a18351d378f041d957acd3c1c94c8e6de462ef2015-10-22_01-32-14120"
+				}
+			},
+			"verb": "PUT"
+		};*/
+
+
+		self.callApi({
+			resource: 'media.list',
+			data: {
+				accountId: self.accountId
+			},
+			success: function(mediaData, status) {
+				console.log('mediaData:');
+				console.log(mediaData);
+
+				mediaData.data.unshift(
+					{
+						id: '',
+						name: 'Default' // TODO: i18n it
+					},
+					{
+						id: 'silence_stream://300000',
+						name: 'Silence' // TODO: i18n it
+					}
+				);
+
+				var html = $(monster.template(self, 'settings_queue_form', {
+					data: data,
+					media_list: mediaData.data
+				}));
+				$container.empty().append(html);
+
+				self.settingsQueueFormBindEvents($container);
+			}
+		});
+	},
+
+	settingsQueueFormBindEvents: function($container) {
+		var self = this;
+
+		$container.find('.js-edit-media').on('click', function(e) {
+			e.preventDefault();
+		});
+
+		$container.find('.js-create-media').on('click', function(e) {
+			e.preventDefault();
+		});
+
+		$container.find('.js-save-queue').on('click', function(e) {
+			e.preventDefault();
+
+			var data = self.settingsQueueFormGetData($container.find('#queue-form'));
+
+			console.log('Queue form data:');
+			console.log(data);
+
+			self.settingsQueueSave(data, function(){
+				console.log('Queue saving complete!');
+			});
+		});
+
+		$container.find('.js-cancel').on('click', function(e) {
+			e.preventDefault();
+		});
+	},
+
+	settingsQueueFormGetData: function($form) {
+		var sourceData = $form.serializeArray();
+		var data = {};
+
+		for(var i=0, len=sourceData.length; i < len; i++) {
+			if(typeof(sourceData[i].value) === 'string' && sourceData[i].value === '') {
+				// is empty string value, to continue iteration
+			} else {
+				data[sourceData[i].name] = sourceData[i].value;
+			}
+		}
+
+		return data;
+	},
+
+	settingsQueueSave: function(queueData, callback) {
+		var self = this;
+
+		/*var data = {
+			"data": {
+				"connection_timeout": "0",
+				"member_timeout": "5",
+				"agent_wrapup_time": "30",
+				"record_caller": true,
+				"moh": "1880ca1c34f3ed88b4071cda175f525e",
+				"notifications": {"hangup": "", "pickup": "", "method": "GET"},
+				"max_queue_size": "0",
+				"name": "test2",
+				"strategy": "round_robin",
+				"call_recording_url": "",
+				"enter_when_empty": false,
+				"ui_metadata": {
+					"ui": "kazoo-ui",
+					"version": "3.22-0https://github.com/2600hz/kazoo-ui.gittags/3.22.096a18351d378f041d957acd3c1c94c8e6de462ef2015-10-22_01-32-14120"
+				}
+			},
+			"verb": "PUT"
+		};*/
+
+		if (typeof(queueData.data) == 'object'
+			&& queueData.data.hasOwnProperty('id')) {
+			// edit queue
+			// 'queue.update'
+
+			self.callApi({
+				resource: 'queues.queues_get',
+				data: {
+					accountId: self.accountId,
+					queuesId: queueData.data.id
+				},
+				success: function(data, status) {
+					console.log(data);
+				}
+			});
+
+		} else {
+			// create new queue
+			// 'queue.create'
+			self.callApi({
+				resource: 'queues.queues_create',
+				data: {
+					accountId: self.accountId,
+					data: queueData
+				},
+				success: function(data, status) {
+					console.log(data);
+				}
+			});
+		}
+
+
+	},
+
+
+	settingsRenderList: function($container, callback) {
+		var self = this;
+
+		self.callApi({
+			resource: 'queues.queues_list',
+			data: {
+				accountId: self.accountId
+			},
+			success: function (data, status) {
+				console.log(data);
+
+
+				var map_crossbar_data = function(data) {
+					var new_list = [];
+
+					if(data.length > 0) {
+						$.each(data, function(key, val) {
+							new_list.push({
+								id: val.id,
+								title: val.name || _t('queue', 'no_name')
+							});
+						});
+					}
+
+					new_list.sort(function(a, b) {
+						return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+					});
+
+					return new_list;
+				};
+
+				var queuesListHtml = $(monster.template(self, 'settings_queues_list', {
+
+				}));
+				$container.find('#queues-list').empty().append(queuesListHtml);
+
+				if(typeof(callback) !== 'undefined') {
+					callback();
+				}
+
+
+
+				/*$('#queue-listpanel', parent)
+					.empty()
+					.listpanel({
+						label: 'Queues',
+						identifier: 'queue-listview',
+						new_entity_label: _t('queue', 'add_acd'),
+						data: map_crossbar_data(data.data),
+						publisher: winkstart.publish,
+						notifyMethod: 'queue.edit',
+						notifyCreateMethod: 'queue.edit',
+						notifyParent: parent
+					});*/
+
+				/*if(typeof(callback) === 'function') {
+					callback();
+				}*/
+			}
+		});
+
+/*		winkstart.request(true, 'queue.list', {
+				account_id: winkstart.apps['call_center'].account_id,
+				api_url: winkstart.apps['call_center'].api_url
+			}
+		);*/
 	},
 
 	fetch_all_data: function(callback) {
@@ -586,7 +924,6 @@ var app = {
 				$v.show();
 			}
 		});
-
 	},
 
 	clean_timers: function() {
@@ -606,7 +943,7 @@ var app = {
 			self.map_timers = {};
 		},
 
-		activate_queue_stat: function(args) {
+		/*activate_queue_stat: function(args) {
 			//TODO check render global data
 			var self = this,
 			container = args.container || $('#monster-content');
@@ -615,9 +952,9 @@ var app = {
 				var $self_queue = $('#'+args.id, container);
 				self.detail_stat(args.id, container);
 			});
-		},
+		},*/
 
-		activate: function(_container) {
+		/*activate: function(_container) {
 			var self = this,
 			container = _container || $('#monster-content');
 			container.empty();
@@ -625,7 +962,7 @@ var app = {
 			self.hide_logout = false;
 			//TODO check render global data
 			self.render(container);
-		},
+		},*/
 
 		login: function(agent, callback) {
 			var self = this,

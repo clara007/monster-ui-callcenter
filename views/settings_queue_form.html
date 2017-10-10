@@ -1,0 +1,181 @@
+{{#if data.id}}
+	<h1>Edit Queue</h1>
+{{else}}
+	<h1>Create Queue</h1>
+{{/if}}
+
+<form id="queue-form" class="form-vertical">
+    <div class="control-group">
+        <label class="control-label" for="queue-name">Name</label>
+        <div class="controls">
+            <input type="text" value="{{ data.name }}" name="name" data-toggle="tooltip"
+				id="queue-name" title="Friendly name for this Queue">
+        </div>
+    </div>
+
+	<div id="accordion" class="accordion-light">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent=".accordion-light" href="#queue-settings" class="collapsed">
+						<i class="fa fa-accordion-mark"></i>
+						<span>Queue settings</span>
+					</a>
+				</h4>
+			</div>
+			<div id="queue-settings" class="panel-collapse collapse">
+				<div class="panel-body">
+					<div class="control-group">
+						<span class="control-label"></span>
+						<div class="controls">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" value="" name="record_caller" {{#if data.record_caller }}checked="checked"{{/if}} >
+									<span data-toggle="tooltip" title="You can also change individual agent's recording settings under the Agent's section">Call Recording</span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-music-on-hold">Music on Hold</label>
+						<div class="controls">
+							<select name="moh" id="queue-music-on-hold" data-toggle="tooltip" title="Select the media file that you want to be played by default when it's not set on a user or a device.">
+								{{#each media_list}}
+									{{#compare @root.data.moh "===" id}}
+										<option id="{{ id }}" value="{{ id }}" selected="selected">{{ name }}</option>
+									{{else}}
+										<option id="{{ id }}" value="{{ id }}">{{ name }}</option>
+									{{/compare}}
+								{{/each}}
+							</select>
+							<a href="#" class="js-edit-media dynamic-link">Edit</a>
+							<a href="#" class="js-create-media dynamic-link">Create</a>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-strategy">Strategy</label>
+						<div class="controls">
+							<select id="queue-strategy" name="strategy" data-toggle="tooltip" title="The queue strategy for connecting agents to caller">
+								{{#compare data.strategy "===" "most_idle"}}
+									<option value="round_robin">Round Robin</option>
+									<option value="most_idle" selected="selected">Most Idle</option>
+								{{else}}
+									<option value="round_robin" selected="selected">Round Robin</option>
+									<option value="most_idle">Most Idle</option>
+								{{/compare}}
+							</select>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-call-recording-url">Call Recording URL</label>
+						<div class="controls">
+							<input id="queue-call-recording-url" type="text" value="{{ data.call_recording_url }}" name="call_recording_url"
+								   placeholder="http://xxx.yyy.com/call_recordings" data-toggle="tooltip"
+								   title="URL pointing to a server that will host the recording of the calls processed by this queue.">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-agent-wrapup-time">Call Wrap-up Time (s)</label>
+						<div class="controls">
+							<input id="queue-agent-wrapup-time" type="text" name="agent_wrapup_time" placeholder="30"
+								   value="{{ data.agent_wrapup_time }}" data-toggle="tooltip"
+								   title="Automatic break time between calls for the agents in this queue.">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-max-queue-size">Max Number of Calls</label>
+						<div class="controls">
+							<input type="text" name="max_queue_size" value="{{ data.max_queue_size }}"
+								id="queue-max-queue-size" placeholder="10000" data-toggle="tooltip"
+								title="How many callers are allowed to wait on hold in the queue (0 for no limit).">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-connection-timeout">Max Hold Time (s)</label>
+						<div class="controls">
+							<input type="text" name="connection_timeout" value="{{ data.connection_timeout }}"
+								id="queue-connection-timeout" placeholder="30" data-toggle="tooltip"
+								title="In seconds, how long to try to connect the caller before progressing past the queue callflow action (0 for no limit).">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<span class="control-label"></span>
+						<div class="controls">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="enter_when_empty" {{#if data.enter_when_empty }}checked="checked"{{/if}}>
+									Allows a caller to enter this queue when no agents are available.
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent=".accordion-light" href="#notifications-settings" class="collapsed">
+						<i class="fa fa-accordion-mark"></i>
+						<span>Notifications settings</span>
+					</a>
+				</h4>
+			</div>
+			<div id="notifications-settings" class="panel-collapse collapse">
+				<div class="panel-body">
+					<div class="control-group">
+						<label class="control-label" for="queue-notifications-hangup">Notification on Hangup</label>
+						<div class="controls">
+							<input type="text" name="notifications.hangup" value="{{ data.notifications.hangup }}"
+								id="queue-notifications-hangup" placeholder="http://xxx.yyy/script_hangup.php" data-toggle="tooltip"
+								title="URL for a callback when the call ends to tell the customer on their own servers that a call has ended.">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-notifications-pickup">Notification after Pickup</label>
+						<div class="controls">
+							<input type="text" name="notifications.pickup" value="{{ data.notifications.pickup }}"
+								id="queue-notifications-pickup" placeholder="http://xxx.yyy/script_pickup.php" data-toggle="tooltip"
+								title="URL for a callback when the call is picked up to tell the customer on their own servers that a call has been picked up.">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-notifications-method">Method</label>
+						<div class="controls">
+							<select name="notifications.method" data-toggle="tooltip" id="queue-notifications-method"
+									title="What HTTP method to use">
+								{{#compare data.notifications.method "===" "POST"}}
+									<option value="GET">GET</option>
+									<option value="POST" selected="selected">POST</option>
+								{{else}}
+									<option value="GET" selected="selected">GET</option>
+									<option value="POST">POST</option>
+								{{/compare}}
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div class="buttons-wrapper clearfix">
+		{{#if data.id}}
+			<button class="btn btn-primary js-save-queue">Save Changes</button>
+			<button class="btn btn-danger js-delete-queue">Save Changes</button>
+		{{else}}
+			<button class="btn btn-primary js-save-queue">Create</button>
+		{{/if}}
+        <button class="btn js-cancel">Cancel</button>
+    </div>
+</form>
