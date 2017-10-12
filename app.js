@@ -543,12 +543,51 @@ var app = {
 		}).click(); // TODO: remove ".click()" after development
 	},
 
+	settingsShowMessage: function(msg, msgType, $container) {
+		if(!$container) {
+			$container = $('#cc-settings-content');
+		}
+
+		var msgTypeClass;
+
+		if(typeof(msgType) === 'undefined') {
+			msgType = 'info';
+		}
+
+		switch(msgType) {
+			case 'warning':
+				msgTypeClass = 'msg-warning';
+				break;
+			case 'success':
+				msgTypeClass = 'msg-success';
+				break;
+			default: // 'info'
+				msgTypeClass = 'msg-info';
+		}
+
+		var $msg = $('<div class="user-message ' + msgTypeClass + '">' + msg + '</div>')
+			.prependTo($container).hide().fadeIn();
+
+		$msg.animate({
+				backgroundColor: '#ffffff',
+				color: '#000000'
+			}, 1000
+		);
+
+		window.setTimeout(function(){
+			$msg.fadeOut(400, function() {
+				$msg.remove();
+			})
+		}, 4000);
+	},
+
 	settingsInit: function($container) {
 		var self = this;
-		self.settingsRenderList($container, function() {
+		var $queuesListBox = $container.find('#queues-list-container');
+		self.settingsQueuesListRender(null, $queuesListBox, function() {
 			monster.ui.tooltips($container, {
 				options: {
-					placement: 'bottom',
+					placement: 'right',
 					container: 'body'
 				}
 			});
@@ -581,12 +620,12 @@ var app = {
 			$(this).removeClass('active');
 		});
 		$queuesList.find('.js-new-queue-item').remove();
-		$queuesList.find('.js-nav-list').append('<li class="js-new-queue-item active"><a href="#">New Queue</a></li>');
+		$queuesList.find('#queues-list').append('<li class="js-new-queue-item active"><a href="#">New Queue</a></li>');
 
 		self.settingsQueueFormRender($parent);
 	},
 
-	settingsQueueFormRender: function($container, data) {
+	settingsQueueFormRender: function($container, data, callback) {
 		var self = this;
 
 		var defaultQueueData = {
@@ -655,6 +694,10 @@ var app = {
 				$container.empty().append(html);
 
 				self.settingsQueueFormBindEvents($container);
+
+				if(typeof(callback) === 'function') {
+					callback();
+				}
 			}
 		});
 	},
@@ -674,11 +717,12 @@ var app = {
 			e.preventDefault();
 
 			var data = self.settingsQueueFormGetData($container.find('#queue-form'));
+			var queueId = $(this).data('queue-id');
 
 			console.log('Queue form data:');
 			console.log(data);
 
-			self.settingsQueueSave(data, function(){
+			self.settingsQueueSave(queueId, data, function(){
 				console.log('Queue saving complete!');
 			});
 		});
@@ -689,21 +733,42 @@ var app = {
 	},
 
 	settingsQueueFormGetData: function($form) {
-		var sourceData = $form.serializeArray();
-		var data = {};
+		var self = this;
 
-		for(var i=0, len=sourceData.length; i < len; i++) {
-			if(typeof(sourceData[i].value) === 'string' && sourceData[i].value === '') {
-				// is empty string value, to continue iteration
-			} else {
-				data[sourceData[i].name] = sourceData[i].value;
-			}
-		}
+		var sourceData = self.serializeForm($form);
+		console.log('Serialized Data:');
+		console.log(sourceData);
 
-		return data;
+		return sourceData;
 	},
 
-	settingsQueueSave: function(queueData, callback) {
+	serializeForm: function($form) {
+		var result = {};
+		$form.find('[name]').each(function(i, el){
+			var $el = $(el);
+			var name = $el.attr('name');
+
+			if(el.tagName === 'INPUT') {
+				if($el.attr('type') === 'checkbox') {
+					result[name] = !!$el.is(':checked');
+					return;
+				}
+
+				if(!!$el.val()) {
+					result[name] = $el.val();
+					return;
+				}
+			}
+
+			if(el.tagName === 'SELECT' && !!$el.find('option:selected').val()) {
+				result[name] = $el.find('option:selected').val();
+			}
+		});
+
+		return result;
+	},
+
+	settingsQueueSave: function(queueId, queueData, callback) {
 		var self = this;
 
 		/*var data = {
@@ -727,25 +792,27 @@ var app = {
 			"verb": "PUT"
 		};*/
 
-		if (typeof(queueData.data) == 'object'
-			&& queueData.data.hasOwnProperty('id')) {
-			// edit queue
-			// 'queue.update'
-
+		if(queueId) {
+			// Edit exist queue
 			self.callApi({
-				resource: 'queues.queues_get',
+				resource: 'queues.queues_update',
 				data: {
 					accountId: self.accountId,
-					queuesId: queueData.data.id
+			 		queuesId: queueId,
+					data: queueData
 				},
 				success: function(data, status) {
 					console.log(data);
+
+					self.settingsQueuesListRender(queueId, null, function() {
+						self.settingsQueueEditFormRender(queueId, function() {
+							self.settingsShowMessage('Saving complete!'); // TODO: i18n it!
+						});
+					});
 				}
 			});
-
 		} else {
-			// create new queue
-			// 'queue.create'
+			// Create new queue
 			self.callApi({
 				resource: 'queues.queues_create',
 				data: {
@@ -754,16 +821,26 @@ var app = {
 				},
 				success: function(data, status) {
 					console.log(data);
+					self.settingsQueuesListRender(data.queue_id, null, function(){
+						self.settingsQueueEditFormRender(data.queue_id, function(){
+							self.settingsShowMessage('Creating complete!'); // TODO: i18n it!
+						});
+					});
 				}
 			});
 		}
-
-
 	},
 
-
-	settingsRenderList: function($container, callback) {
+	settingsQueuesListRender: function(activeQueueId, $parent, callback) {
 		var self = this;
+
+		if(!activeQueueId || typeof(activeQueueId) === 'undefined') {
+			activeQueueId = null;
+		}
+
+		if(!$parent) {
+			$parent = $('#queues-list-container');
+		}
 
 		self.callApi({
 			resource: 'queues.queues_list',
@@ -781,7 +858,7 @@ var app = {
 						$.each(data, function(key, val) {
 							new_list.push({
 								id: val.id,
-								title: val.name || _t('queue', 'no_name')
+								title: val.name || 'No name' // TODO: i18n it!
 							});
 						});
 					}
@@ -794,40 +871,60 @@ var app = {
 				};
 
 				var queuesListHtml = $(monster.template(self, 'settings_queues_list', {
-
+					queues: map_crossbar_data(data.data),
+					active_queue_id: activeQueueId
 				}));
-				$container.find('#queues-list').empty().append(queuesListHtml);
+
+				$parent.empty().append(queuesListHtml);
+
+				self.settingsQueuesListBind($parent);
 
 				if(typeof(callback) !== 'undefined') {
 					callback();
 				}
-
-
-
-				/*$('#queue-listpanel', parent)
-					.empty()
-					.listpanel({
-						label: 'Queues',
-						identifier: 'queue-listview',
-						new_entity_label: _t('queue', 'add_acd'),
-						data: map_crossbar_data(data.data),
-						publisher: winkstart.publish,
-						notifyMethod: 'queue.edit',
-						notifyCreateMethod: 'queue.edit',
-						notifyParent: parent
-					});*/
-
-				/*if(typeof(callback) === 'function') {
-					callback();
-				}*/
 			}
 		});
+	},
 
-/*		winkstart.request(true, 'queue.list', {
-				account_id: winkstart.apps['call_center'].account_id,
-				api_url: winkstart.apps['call_center'].api_url
+	settingsQueuesListBind: function($container){
+		var self = this;
+
+		$container.find('.js-select-queue').on('click', function(e) {
+			e.preventDefault();
+
+			var $queuesList = $(this).closest('#queues-list');
+			$queuesList.find('.active').removeClass('active');
+			$queuesList.find('.js-new-queue-item').remove();
+
+			var queueId = $(this).closest('li').addClass('active').data('id');
+			console.log('Edit queue: ' + queueId);
+
+			self.settingsQueueEditFormRender(queueId, function(){});
+		})
+
+	},
+
+	settingsQueueEditFormRender: function(queueId, callback) {
+		var self = this;
+
+		if(!queueId || typeof(queueId) === 'undefined') {
+			console.log('Error while edit queue: queue id is undefined');
+			return;
+		}
+
+		self.callApi({
+			resource: 'queues.queues_get',
+			data: {
+				accountId: self.accountId,
+				queuesId: queueId
+			},
+			success: function(data, status) {
+				console.log(data);
+
+				var $parent = $('#cc-settings-content');
+				self.settingsQueueFormRender($parent, data.data, callback);
 			}
-		);*/
+		});
 	},
 
 	fetch_all_data: function(callback) {

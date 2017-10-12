@@ -171,8 +171,8 @@
 
     <div class="buttons-wrapper clearfix">
 		{{#if data.id}}
-			<button class="btn btn-primary js-save-queue">Save Changes</button>
-			<button class="btn btn-danger js-delete-queue">Save Changes</button>
+			<button class="btn btn-primary js-save-queue" data-queue-id="{{ data.id }}">Save Changes</button>
+			<button class="btn btn-danger js-delete-queue" data-queue-id="{{ data.id }}">Delete Queue</button>
 		{{else}}
 			<button class="btn btn-primary js-save-queue">Create</button>
 		{{/if}}
