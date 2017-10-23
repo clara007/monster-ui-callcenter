@@ -41,3 +41,19 @@ Installation
         'agents_livestats_loading': { 'verb': 'GET', 'url': 'accounts/{accountId}/agents/stats' }
     },
 ```
+3. Add files to `/src/js/vendor/datatables`
+- buttons.bootstrap.min.js
+- buttons.html5.min.js
+- dataTables.bootstrap.min.js
+- dataTables.buttons.min.js
+- jquery.dataTables.min.js
+4. Add file `jquery.dataTables.css` to `/src/css/vendor/jquery/`
+5. Add next strings to `/src/js/main.js` after `paths: {`:
+```javascript
+    'datatables.net': 'js/vendor/datatables/jquery.dataTables.min',
+    'datatables.net-bs': 'js/vendor/datatables/dataTables.bootstrap.min',
+    'datatables.net-buttons': 'js/vendor/datatables/dataTables.buttons.min',
+    'datatables.net-buttons-html5': 'js/vendor/datatables/buttons.html5.min',
+    'datatables.net-buttons-bootstrap': 'js/vendor/datatables/buttons.bootstrap.min',
+```
+

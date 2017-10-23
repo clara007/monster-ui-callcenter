@@ -4,6 +4,14 @@ define(function(require){
 		monster = require('monster'),
 		toastr = require('toastr');
 
+	require([
+		'datatables.net',
+		'datatables.net-bs',
+		'datatables.net-buttons',
+		'datatables.net-buttons-html5',
+		'datatables.net-buttons-bootstrap'
+	]);
+
 var app = {
 	name: 'callcenter',
 
@@ -23,6 +31,16 @@ var app = {
 		'es-ES': { customCss: false }
 	},
 
+	requests: {
+		/* move here all unstandart request
+
+		'google.getUser': {
+			apiRoot: 'http://api.google.com/',
+			url: 'users',
+			verb: 'PUT'
+		}*/
+	},
+
 	load: function(callback){
 		var self = this;
 
@@ -39,12 +57,24 @@ var app = {
 		calls_in_progress: {}
 	},
 
+	vars: {
+		users: []
+	},
+
 	initApp: function(callback) {
 		var self = this;
 
 		monster.pub('auth.initApp', {
 			app: self,
 			callback: callback
+		});
+
+		self.initHandlebarsHelpers();
+	},
+
+	initHandlebarsHelpers: function() {
+		Handlebars.registerHelper('inc', function(value, options) {
+			return parseInt(value) + 1;
 		});
 
 		Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options) {
@@ -537,9 +567,7 @@ var app = {
 
 		$container.find('.js-open-cc-settings').on('click', function(e) {
 			e.preventDefault();
-			var html = $(monster.template(self, 'settings', {}));
-			$container.empty().append(html);
-			self.settingsInit($container);
+			self.settingsRender($container);
 		}).click(); // TODO: remove ".click()" after development
 	},
 
@@ -581,7 +609,14 @@ var app = {
 		}, 4000);
 	},
 
-	settingsInit: function($container) {
+	settingsRender: function($container, callback) {
+		var self = this;
+		var html = $(monster.template(self, 'settings', {}));
+		$container.empty().append(html);
+		self.settingsInit($container, callback);
+	},
+
+	settingsInit: function($container, callback) {
 		var self = this;
 		var $queuesListBox = $container.find('#queues-list-container');
 		self.settingsQueuesListRender(null, $queuesListBox, function() {
@@ -593,6 +628,13 @@ var app = {
 			});
 
 			self.settingsBindEvents($container);
+
+			// TODO: remove after development
+			$('#queues-list li:first-child a').click();
+
+			if(typeof(callback) === 'function') {
+				callback();
+			}
 		});
 
 	},
@@ -625,7 +667,7 @@ var app = {
 		self.settingsQueueFormRender($parent);
 	},
 
-	settingsQueueFormRender: function($container, data, callback) {
+	settingsQueueFormRender: function($container, queueData, callback) {
 		var self = this;
 
 		var defaultQueueData = {
@@ -638,7 +680,7 @@ var app = {
 			max_queue_size: '0'
 		};
 
-		data = $.extend(true, defaultQueueData, data || {});
+		queueData = $.extend(true, defaultQueueData, queueData || {});
 /*		var data = {
 			"data": {
 				"name": "test2",
@@ -666,37 +708,224 @@ var app = {
 			"verb": "PUT"
 		};*/
 
-
-		self.callApi({
-			resource: 'media.list',
-			data: {
-				accountId: self.accountId
+		monster.parallel({
+				users: function(callback) {
+					self.callApi({
+						resource: 'user.list',
+						data: {
+							accountId: self.accountId
+						},
+						success: function (users) {
+							callback(null, users.data);
+						}
+					});
+				},
+				media: function(callback) {
+					self.callApi({
+						resource: 'media.list',
+						data: {
+							accountId: self.accountId
+						},
+						success: function(media, status) {
+							callback(null, media.data);
+						}
+					});
+				}
 			},
-			success: function(mediaData, status) {
-				console.log('mediaData:');
-				console.log(mediaData);
+			function(err, results) {
+				if (err) {
+					console.log('Error');
+					console.log(err);
+				} else {
 
-				mediaData.data.unshift(
-					{
-						id: '',
-						name: 'Default' // TODO: i18n it
-					},
-					{
-						id: 'silence_stream://300000',
-						name: 'Silence' // TODO: i18n it
-					}
-				);
+					// results.media
+					// results.users
 
-				var html = $(monster.template(self, 'settings_queue_form', {
-					data: data,
-					media_list: mediaData.data
-				}));
-				$container.empty().append(html);
+					results.media.unshift(
+						{
+							id: '',
+							name: 'Default' // TODO: i18n it
+						},
+						{
+							id: 'silence_stream://300000',
+							name: 'Silence' // TODO: i18n it
+						}
+					);
 
-				self.settingsQueueFormBindEvents($container);
+					var html = $(monster.template(self, 'settings_queue_form', {
+						data: queueData,
+						media_list: results.media
+					}));
 
-				if(typeof(callback) === 'function') {
-					callback();
+					self.vars.users = results.users;
+
+					$container.empty().append(html);
+					self.settingsQueueFormBindEvents($container);
+					self.settingsQueueAgentsPanelRender(results.users, queueData.agents, $container);
+				}
+
+			});
+	},
+
+	settingsQueueAgentsPanelRender: function(usersList, selectedAgentsIdList, $container) {
+		var self = this,
+			agentsList,
+			usersWithoutAgents;
+
+		agentsList = self.settingsQueueAgentsPanelExtractAgentsData(selectedAgentsIdList, usersList);
+		usersWithoutAgents = self.settingsQueueAgentsPanelGetUsersWithoutAgents(usersList, agentsList);
+
+
+		var template = $(monster.template(self, 'settings_queue_agents', {
+			agents: agentsList,
+			users: usersWithoutAgents
+		}));
+
+		var $parent = $container.find('#queue-agents-content');
+		$parent.html(template);
+
+		self.settingsQueueAgentsPanelInit($parent, function(){
+			self.settingsQueueAgentsPanelBindEvents($parent);
+		});
+	},
+
+	settingsQueueAgentsPanelExtractAgentsData: function(selectedAgentsIdList, usersList) {
+		// fill agents list
+		var agentsList = [];
+		for(var a=0, alen= selectedAgentsIdList.length; a<alen; a++) {
+			for(var u=0, ulen= usersList.length; u<ulen; u++) {
+				if(selectedAgentsIdList[a] === usersList[u].id) {
+					console.log('selectedAgentsIdList[a]:');
+					console.log(selectedAgentsIdList[a]);
+
+					console.log('usersList[u]:');
+					console.log(usersList[u]);
+					agentsList.push(usersList[u]);
+					break;
+				}
+			}
+		}
+		return agentsList;
+	},
+
+	settingsQueueAgentsPanelGetUsersWithoutAgents: function(users, agents) {
+		var usersWithoutAgents = [];
+
+		for(var u=0, ulen=users.length; u<ulen; u++) {
+			for(var a=0, alen= agents.length; a<alen; a++) {
+				if(agents[a].id === users[u].id) {
+					users[u].isAgent = true;
+					break;
+				}
+			}
+		}
+
+		for(u=0, ulen=users.length; u<ulen; u++) {
+			if(!users[u].isAgent) {
+				usersWithoutAgents.push(users[u]);
+			}
+		}
+
+		return usersWithoutAgents;
+	},
+
+	settingsQueueAgentsPanelBindEvents: function($parent) {
+		var self = this;
+		var handledClass= 'js-handled';
+
+		$parent.find('.js-remove-agent').not('.js-handled').on('click', function(e) {
+			e.preventDefault();
+			$(this).closest('li').remove();
+			self.settingsQueueAgentsPanelUpdateUserTable();
+		}).addClass(handledClass);
+
+		$parent.find('.js-add-agent').not('.js-handled').on('click', function(e) {
+			e.preventDefault();
+
+			var $userContainer = $(this).closest('tr');
+			var userId = $userContainer.data('user-id');
+			var $agentsList = $('#queue-agents-list');
+			var userName = $userContainer.find('.js-user-name').text();
+
+			if($agentsList.find('[data-user-id="' + userId + '"]').length > 0) {
+				// already exist
+				return;
+			}
+
+			var userItemHTML = ('' +
+				'<li data-user-id="{{id}}">' +
+					'<span class="item-name">{{name}}</span>' +
+					'<a href="#" class="js-remove-agent remove-agent-btn">' +
+						'<i class="fa fa-remove"></i>' +
+					'</a>' +
+				'</li>')
+					.replace('{{id}}', userId)
+					.replace('{{name}}', userName);
+
+
+			$agentsList.append(userItemHTML);
+			self.settingsQueueAgentsPanelBindEvents($agentsList);
+			self.settingsQueueAgentsPanelUpdateUserTable();
+		}).addClass(handledClass);
+
+		$parent.find('.js-edit-user').not('.js-handled').on('click', function(e) {
+			e.preventDefault();
+
+			// TODO: open popup with user settings for editing
+
+			$(this).addClass('js-handled');
+		}).addClass(handledClass);
+	},
+
+	settingsQueueAgentsPanelUpdateUserTable: function() {
+		// find exist agents
+		var self = this;
+		var agentsIdList = [];
+		var $agentsItems = $('#queue-agents-list').find('li');
+
+		// clear user's agent property
+		for(var u=0, ulen=self.vars.users.length; u<ulen; u++) {
+			self.vars.users[u].isAgent = false;
+		}
+
+		$agentsItems.each(function(i, el){
+			var userId = $(el).data('user-id');
+			if(userId) {
+				agentsIdList.push(userId);
+			}
+		});
+
+		console.log('self.vars.users:');
+		console.log(self.vars.users);
+
+		self.settingsQueueAgentsPanelRender(self.vars.users, agentsIdList, $('#queue-agents-wrapper'))
+	},
+
+	settingsQueueAgentsPanelInit: function($parent, callback) {
+		var table = $parent.find('#queue-users-table').DataTable({
+			bStateSave: false,
+			lengthMenu: [[10, 25, -1], [10, 25, 'All']],
+			order: [[ 1, 'asc' ]],
+			autoWidth: false,
+			columnDefs: [
+				{
+					targets: 0,
+					width: '5%'
+				},
+				{
+					targets  : 'no-sort',
+					orderable: false
+				}
+			],
+			language: {
+				search: '',
+				searchPlaceholder: 'Search...'
+			},
+			dom: 'ftplB',
+			buttons: [],
+			initComplete: function(settings, json) {
+				if(typeof(callback) !== 'undefined') {
+					callback(settings, json);
 				}
 			}
 		});
@@ -716,35 +945,89 @@ var app = {
 		$container.find('.js-save-queue').on('click', function(e) {
 			e.preventDefault();
 
-			var data = self.settingsQueueFormGetData($container.find('#queue-form'));
+			var data = self.serializeFormElements($container.find('#queue-form'));
 			var queueId = $(this).data('queue-id');
 
 			console.log('Queue form data:');
 			console.log(data);
 
-			self.settingsQueueSave(queueId, data, function(){
-				console.log('Queue saving complete!');
+			var agentsIdList = [];
+			$('#queue-agents-list').find('li').each(function(i, el) {
+				var userId = $(el).data('user-id');
+				if(userId) {
+					agentsIdList.push(userId);
+				}
+			});
+
+			self.settingsAgentsSave(queueId, agentsIdList, function() {
+				self.settingsQueueSave(queueId, data, function(){
+					console.log('Queue saving complete!');
+				});
+			});
+
+		});
+
+		$container.find('.js-delete-queue').on('click', function(e) {
+			e.preventDefault();
+			var queueId = $(this).data('queue-id');
+
+			// TODO: i18n it!
+			monster.ui.confirm('Are you sure to remove this queue?', function() {
+				self.settingsQueueRemove(queueId, function() {
+					self.settingsRender($('#monster_content'), function(){
+						// TODO: i18n it!
+						self.settingsShowMessage('Queue was successfully removed!', 'success')
+					});
+				});
 			});
 		});
+	},
 
-		$container.find('.js-cancel').on('click', function(e) {
-			e.preventDefault();
+	settingsQueueRemove: function(queueId, callback) {
+		var self = this;
+
+		self.callApi({
+			resource: 'queues.queues_delete',
+			data: {
+				accountId: self.accountId,
+				queuesId: queueId
+			},
+			success: function(data, status) {
+				if(typeof(callback) === 'function') {
+					callback();
+				}
+			}
 		});
 	},
 
-	settingsQueueFormGetData: function($form) {
+	settingsAgentsSave: function(queueId, agentsIdList, callback) {
 		var self = this;
 
-		var sourceData = self.serializeForm($form);
-		console.log('Serialized Data:');
-		console.log(sourceData);
+		self.callApi({
+			resource: 'agents.agents_update',
+			data: {
+				accountId: self.accountId,
+				queuesId: queueId,
+				data: agentsIdList
+			},
+			success: function(data, status) {
+				console.log('Agents were saved.');
+				console.log(data);
 
-		return sourceData;
+				if(typeof(callback) === 'function') {
+					callback();
+				}
+			}
+		});
 	},
 
-	serializeForm: function($form) {
+	serializeFormElements: function($parent, selector) {
+		if(typeof(selector) === 'undefined') {
+			selector = '.js-to-serialize[name]';
+		}
+
 		var result = {};
-		$form.find('[name]').each(function(i, el){
+		$parent.find(selector).each(function(i, el){
 			var $el = $(el);
 			var name = $el.attr('name');
 
