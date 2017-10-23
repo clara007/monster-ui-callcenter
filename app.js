@@ -792,6 +792,11 @@ var app = {
 	settingsQueueAgentsPanelExtractAgentsData: function(selectedAgentsIdList, usersList) {
 		// fill agents list
 		var agentsList = [];
+
+		if(!selectedAgentsIdList) {
+			return agentsList;
+		}
+
 		for(var a=0, alen= selectedAgentsIdList.length; a<alen; a++) {
 			for(var u=0, ulen= usersList.length; u<ulen; u++) {
 				if(selectedAgentsIdList[a] === usersList[u].id) {
@@ -862,18 +867,10 @@ var app = {
 					.replace('{{id}}', userId)
 					.replace('{{name}}', userName);
 
-
+			$agentsList.find('.js-empty-item').remove();
 			$agentsList.append(userItemHTML);
 			self.settingsQueueAgentsPanelBindEvents($agentsList);
 			self.settingsQueueAgentsPanelUpdateUserTable();
-		}).addClass(handledClass);
-
-		$parent.find('.js-edit-user').not('.js-handled').on('click', function(e) {
-			e.preventDefault();
-
-			// TODO: open popup with user settings for editing
-
-			$(this).addClass('js-handled');
 		}).addClass(handledClass);
 	},
 
@@ -910,7 +907,7 @@ var app = {
 			columnDefs: [
 				{
 					targets: 0,
-					width: '5%'
+					width: '4%'
 				},
 				{
 					targets  : 'no-sort',
@@ -952,7 +949,7 @@ var app = {
 			console.log(data);
 
 			var agentsIdList = [];
-			$('#queue-agents-list').find('li').each(function(i, el) {
+			$('#queue-agents-list').find('li[data-user-id]').each(function(i, el) {
 				var userId = $(el).data('user-id');
 				if(userId) {
 					agentsIdList.push(userId);

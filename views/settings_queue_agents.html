@@ -3,14 +3,18 @@
 		<div class="agents-list-wrapper well-list">
 			<h3>Selected</h3>
 			<ul id="queue-agents-list">
-				{{#each this.agents}}
-					<li data-user-id="{{ id }}">
-						<span class="item-name">{{ first_name }} {{ last_name }}</span>
-						<a href="#" class="js-remove-agent remove-agent-btn">
-							<i class="fa fa-remove"></i>
-						</a>
-					</li>
-				{{/each}}
+				{{#if this.agents}}
+					{{#each this.agents}}
+						<li data-user-id="{{ id }}">
+							<span class="item-name">{{ first_name }} {{ last_name }}</span>
+							<a href="#" class="js-remove-agent remove-agent-btn">
+								<i class="fa fa-remove"></i>
+							</a>
+						</li>
+					{{/each}}
+				{{else}}
+					<li class="js-empty-item empty-item">None</li>
+				{{/if}}
 			</ul>
 		</div>
 	</div>
@@ -18,7 +22,7 @@
 		<table id="queue-users-table" class="table table-condensed table-striped table-hover">
 			<thead>
 				<tr>
-					<th class="no-sort">Actions</th>
+					<th class="no-sort">Add</th>
 					<th>User Name</th>
 				</tr>
 			</thead>
@@ -28,9 +32,6 @@
 				<td class="actions-col">
 					<a href="#" class="mini-btn js-add-agent add-agent-btn">
 						<i class="fa fa-arrow-left"></i>
-					</a>
-					<a href="#" class="mini-btn js-edit-user edit-agent-btn">
-						<i class="fa fa-pencil-square-o"></i>
 					</a>
 				</td>
 				<td class="js-user-name">{{ first_name }} {{ last_name }}</td>
