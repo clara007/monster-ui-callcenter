@@ -664,7 +664,9 @@ var app = {
 		$queuesList.find('.js-new-queue-item').remove();
 		$queuesList.find('#queues-list').append('<li class="js-new-queue-item active"><a href="#">New Queue</a></li>');
 
-		self.settingsQueueFormRender($parent);
+		self.settingsQueueFormRender($parent, {}, function(){
+			$('.js-to-serialize').first().focus();
+		});
 	},
 
 	settingsQueueFormRender: function($container, queueData, callback) {
@@ -762,6 +764,10 @@ var app = {
 					$container.empty().append(html);
 					self.settingsQueueFormBindEvents($container);
 					self.settingsQueueAgentsPanelRender(results.users, queueData.agents, $container);
+
+					if(typeof(callback) === 'function') {
+						callback(results);
+					}
 				}
 
 			});
@@ -816,6 +822,12 @@ var app = {
 	settingsQueueAgentsPanelGetUsersWithoutAgents: function(users, agents) {
 		var usersWithoutAgents = [];
 
+		// reset user's property "isAgent"
+		for(var user=0, userLen=users.length; user<userLen; user++) {
+			users[user].isAgent = false;
+		}
+
+		// set property "isAgent" to user-agents
 		for(var u=0, ulen=users.length; u<ulen; u++) {
 			for(var a=0, alen= agents.length; a<alen; a++) {
 				if(agents[a].id === users[u].id) {
@@ -825,6 +837,7 @@ var app = {
 			}
 		}
 
+		// collect agents
 		for(u=0, ulen=users.length; u<ulen; u++) {
 			if(!users[u].isAgent) {
 				usersWithoutAgents.push(users[u]);
@@ -880,11 +893,6 @@ var app = {
 		var agentsIdList = [];
 		var $agentsItems = $('#queue-agents-list').find('li');
 
-		// clear user's agent property
-		for(var u=0, ulen=self.vars.users.length; u<ulen; u++) {
-			self.vars.users[u].isAgent = false;
-		}
-
 		$agentsItems.each(function(i, el){
 			var userId = $(el).data('user-id');
 			if(userId) {
@@ -895,7 +903,7 @@ var app = {
 		console.log('self.vars.users:');
 		console.log(self.vars.users);
 
-		self.settingsQueueAgentsPanelRender(self.vars.users, agentsIdList, $('#queue-agents-wrapper'))
+		self.settingsQueueAgentsPanelRender(self.vars.users, agentsIdList, $('#queue-agents-wrapper'));
 	},
 
 	settingsQueueAgentsPanelInit: function($parent, callback) {
@@ -921,7 +929,7 @@ var app = {
 			dom: 'ftplB',
 			buttons: [],
 			initComplete: function(settings, json) {
-				if(typeof(callback) !== 'undefined') {
+				if(typeof(callback) === 'function') {
 					callback(settings, json);
 				}
 			}
@@ -956,9 +964,14 @@ var app = {
 				}
 			});
 
-			self.settingsAgentsSave(queueId, agentsIdList, function() {
-				self.settingsQueueSave(queueId, data, function(){
-					console.log('Queue saving complete!');
+			self.settingsQueueSave(queueId, data, function(queueData) {
+				console.log('Queue was saved');
+				console.log(queueData);
+				self.settingsAgentsSave(queueData.id, agentsIdList, function(agentsIdList) {
+					console.log('Agents were saved');
+					console.log(agentsIdList);
+					console.log('Queue saving finished!');
+					self.settingsQueueAgentsPanelRender(self.vars.users, agentsIdList, $('#queue-agents-wrapper'));
 				});
 			});
 
@@ -1009,10 +1022,10 @@ var app = {
 			},
 			success: function(data, status) {
 				console.log('Agents were saved.');
-				console.log(data);
+				console.log(data.data.agents);
 
 				if(typeof(callback) === 'function') {
-					callback();
+					callback(data.data.agents);
 				}
 			}
 		});
@@ -1087,6 +1100,9 @@ var app = {
 					self.settingsQueuesListRender(queueId, null, function() {
 						self.settingsQueueEditFormRender(queueId, function() {
 							self.settingsShowMessage('Saving complete!'); // TODO: i18n it!
+							if(typeof(callback) === 'function') {
+								callback(data.data);
+							}
 						});
 					});
 				}
@@ -1101,9 +1117,12 @@ var app = {
 				},
 				success: function(data, status) {
 					console.log(data);
-					self.settingsQueuesListRender(data.queue_id, null, function(){
-						self.settingsQueueEditFormRender(data.queue_id, function(){
+					self.settingsQueuesListRender(data.data.id, null, function() {
+						self.settingsQueueEditFormRender(data.data.id, function() {
 							self.settingsShowMessage('Creating complete!'); // TODO: i18n it!
+							if(typeof(callback) === 'function') {
+								callback(data.data);
+							}
 						});
 					});
 				}
@@ -1159,7 +1178,7 @@ var app = {
 
 				self.settingsQueuesListBind($parent);
 
-				if(typeof(callback) !== 'undefined') {
+				if(typeof(callback) === 'function') {
 					callback();
 				}
 			}
