@@ -117,6 +117,19 @@ var app = {
 		});
 	},
 
+	initHeaderSubmenu: function() {
+		var $headerMenu = $('#cc-header-menu');
+		$headerMenu.on('mouseenter', function(){
+			$(this).find('.js-header-menu-items').fadeIn();
+			$(this).find('.js-header-menu-title').hide();
+		}).on('mouseleave', function(){
+			$(this).find('.js-header-menu-items').hide();
+			$(this).find('.js-header-menu-title').fadeIn();
+		}).on('click', function(e){
+			e.preventDefault();
+		});
+	},
+
 	queue_eavesdrop: function (callback) {
 		var self = this;
 
@@ -533,6 +546,7 @@ var app = {
 
 		// account switching for monster-ui
 		self.accountId = monster.apps.auth.accountId;
+
 		self.clean_timers();
 
 		self.fetch_all_data(function(data) {
@@ -559,6 +573,7 @@ var app = {
 			}
 
 			self.dashboardBindEvents(container);
+			self.initHeaderSubmenu();
 		});
 	},
 
@@ -568,7 +583,7 @@ var app = {
 		$container.find('.js-open-cc-settings').on('click', function(e) {
 			e.preventDefault();
 			self.settingsRender($container);
-		}).click(); // TODO: remove ".click()" after development
+		});
 	},
 
 	settingsShowMessage: function(msg, msgType, $container) {
@@ -614,6 +629,7 @@ var app = {
 		var html = $(monster.template(self, 'settings', {}));
 		$container.empty().append(html);
 		self.settingsInit($container, callback);
+		self.initHeaderSubmenu();
 	},
 
 	settingsInit: function($container, callback) {
@@ -629,7 +645,6 @@ var app = {
 
 			self.settingsBindEvents($container);
 
-			// TODO: remove after development
 			$('#queues-list li:first-child a').click();
 
 			if(typeof(callback) === 'function') {
