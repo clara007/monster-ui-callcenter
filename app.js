@@ -120,11 +120,11 @@ var app = {
 	initHeaderSubmenu: function() {
 		var $headerMenu = $('#cc-header-menu');
 		$headerMenu.on('mouseenter', function(){
-			$(this).find('.js-header-menu-items').fadeIn();
+			$(this).find('.js-header-menu-items').show();
 			$(this).find('.js-header-menu-title').hide();
 		}).on('mouseleave', function(){
 			$(this).find('.js-header-menu-items').hide();
-			$(this).find('.js-header-menu-title').fadeIn();
+			$(this).find('.js-header-menu-title').show();
 		}).on('click', function(e){
 			e.preventDefault();
 		});
@@ -679,9 +679,7 @@ var app = {
 		$queuesList.find('.js-new-queue-item').remove();
 		$queuesList.find('#queues-list').append('<li class="js-new-queue-item active"><a href="#">New Queue</a></li>');
 
-		self.settingsQueueFormRender($parent, {}, function(){
-			$('.js-to-serialize').first().focus();
-		});
+		self.settingsQueueFormRender($parent);
 	},
 
 	settingsQueueFormRender: function($container, queueData, callback) {
