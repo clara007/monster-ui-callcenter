@@ -158,7 +158,7 @@
 #dashboard-content #callwaiting-list .add_flow {
     line-height: 60px;
     cursor: default;
-    color: #05addc;
+    color: #22A5FF;
     font-size: 14px;
     font-weight: bold;
 }
@@ -184,7 +184,7 @@
     width: 45px;
     height: 27px;
     line-height: 27px;
-    color: #05addc;
+    color: #22A5FF;
 }
 
 /* Bottom-right content */
@@ -204,18 +204,37 @@
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper {
     display: inline-block;
     margin: 0 10px 20px;
-    padding: 0 5px 5px;
+    padding: 0;
     border-radius: 5px;
-    width: auto;
     border: 1px solid #555;
     background: white;
+    vertical-align: top;
+    width: 240px;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_header{
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_header {
     color: #555;
-    border-bottom: 1px solid #555;
-    padding: 5px 7px;
     font-size: 15px;
+    display: inline-block;
+    margin: 0 10px 0;
+    padding: 0 5px 5px;
+    border-bottom: 1px solid #555;
+    background: white;
+    vertical-align: top;
+    box-sizing: content-box;
+    white-space: nowrap;
+    padding-top: 7px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 210px;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_header .fa {
+    margin-right: 5px;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_data {
+    padding: 20px 5px 15px;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .row_data {
@@ -254,125 +273,98 @@
 }
 
 /* Color change based on agent's status */
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.handling{
-    border: 1px solid #62c462;
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper {
+    &.ready,
+    &.paused,
+    &.busy,
+    &.connecting,
+    &.wrapup,
+    &.handling {
+        border: 1px solid #22A5FF;
+        padding-left: 0;
+        padding-right: 0;
+
+        .agent_header {
+            color: white;
+            border-color: white;
+            background: #22A5FF;
+            padding-left: 12px;
+            padding-right: 12px;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+    &.ready {
+        .row_data.call_time .data_value {
+            color: #22A5FF;
+        }
+    }
+
+
+    &.paused {
+        border-color: #ff7733;
+
+        .agent_header {
+            background: #ff7733;
+        }
+
+        .row_data.call_time .data_value{
+            color: #ff7733;
+        }
+    }
+
+    &.busy {
+        border-color: #ffbb33;
+
+        .agent_header {
+            background: #ffbb33;
+        }
+
+        .row_data.call_time .data_value {
+            color: #ffbb33;
+        }
+    }
+
+    &.wrapup {
+        border-color: #ffbb33;
+
+        .agent_header {
+            background: #ffbb33;
+        }
+
+        .row_data.call_time .data_value {
+            color: #ffbb33;
+        }
+    }
+
+    &.handling {
+        border-color: #62c462;
+
+        .agent_header {
+            background: #62c462;
+        }
+
+        .row_data.call_time .data_value{
+            color: #62c462;
+        }
+    }
+
+    &.connecting {
+        border-color: #3366cc;
+
+        .agent_header{
+            background: #3366cc;
+        }
+
+        .row_data.call_time .data_value{
+            color: #3366cc;
+        }
+    }
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.handling .agent_header{
-    background: #62c462;
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#62c462), to(#57a957));
-    background-image: -moz-linear-gradient(top, #62c462, #57a957);
-    background-image: -ms-linear-gradient(top, #62c462, #57a957);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #62c462), color-stop(100%, #57a957));
-    background-image: -webkit-linear-gradient(top, #62c462, #57a957);
-    background-image: -o-linear-gradient(top, #62c462, #57a957);
-    background-image: linear-gradient(top, #62c462, #57a957);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#57a957', GradientType=0);
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.handling .row_data.call_time .data_value{
-    color: #62c462;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.connecting{
-    border: 1px solid #3366cc;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.connecting .agent_header{
-    background: #3366cc;
-	background-image: -khtml-gradient(linear, left top, left bottom, from(#3366cc), to(#3333cc));
-    background-image: -moz-linear-gradient(top, #3366cc, #3333cc);
-    background-image: -ms-linear-gradient(top, #3366cc, #3333cc);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #3366cc), color-stop(100%, #3333cc));
-    background-image: -webkit-linear-gradient(top, #3366cc, #3333cc);
-    background-image: -o-linear-gradient(top, #3366cc, #3333cc);
-    background-image: linear-gradient(top, #3366cc, #3333cc);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3366cc', endColorstr='#3333cc', GradientType=0);
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.connecting .row_data.call_time .data_value{
-	color: #3366cc;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready {
-    border: 1px solid #05addc;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .agent_header {
-    background: #05addc;
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#05addc), to(#049cdb));
-    background-image: -moz-linear-gradient(top, #05addc, #049cdb);
-    background-image: -ms-linear-gradient(top, #05addc, #049cdb);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #05addc), color-stop(100%, #049cdb));
-    background-image: -webkit-linear-gradient(top, #05addc, #049cdb);
-    background-image: -o-linear-gradient(top, #05addc, #049cdb);
-    background-image: linear-gradient(top, #05addc, #049cdb);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#05addc', endColorstr='#049cdb', GradientType=0);
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .row_data.call_time .data_value{
-    color: #05addc;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused{
-    border: 1px solid #ff7733;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused .agent_header{
-    background: #ff7733;
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#ff7733), to(#FF5533));
-    background-image: -moz-linear-gradient(top, #ff7733, #FF5533);
-    background-image: -ms-linear-gradient(top, #ff7733, #FF5533);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff7733), color-stop(100%, #FF5533));
-    background-image: -webkit-linear-gradient(top, #ff7733, #FF5533);
-    background-image: -o-linear-gradient(top, #ff7733, #FF5533);
-    background-image: linear-gradient(top, #ff7733, #FF5533);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff7733', endColorstr='#FF5533', GradientType=0);
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused .row_data.call_time .data_value{
-    color: #ff7733;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.busy {
-    border: 1px solid #ffbb33;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.busy .agent_header {
-    background: #ffbb33;
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#ffbb33), to(#FF9933));
-    background-image: -moz-linear-gradient(top, #ffbb33, #FF9933);
-    background-image: -ms-linear-gradient(top, #ffbb33, #FF9933);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffbb33), color-stop(100%, #FF9933));
-    background-image: -webkit-linear-gradient(top, #ffbb33, #FF9933);
-    background-image: -o-linear-gradient(top, #ffbb33, #FF9933);
-    background-image: linear-gradient(top, #ffbb33, #FF9933);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffbb33', endColorstr='#FF9933', GradientType=0);
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.busy .row_data.call_time .data_value {
-    color: #ffbb33;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup {
-    border: 1px solid #ffbb33;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup .agent_header {
-    background: #ffbb33;
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#ffbb33), to(#FF9933));
-    background-image: -moz-linear-gradient(top, #ffbb33, #FF9933);
-    background-image: -ms-linear-gradient(top, #ffbb33, #FF9933);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffbb33), color-stop(100%, #FF9933));
-    background-image: -webkit-linear-gradient(top, #ffbb33, #FF9933);
-    background-image: -o-linear-gradient(top, #ffbb33, #FF9933);
-    background-image: linear-gradient(top, #ffbb33, #FF9933);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffbb33', endColorstr='#FF9933', GradientType=0);
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup .row_data.call_time .data_value{
-    color: #ffbb33;
-}
 
 #dashboard-content .agent_text {
     font-weight: bold;
@@ -397,7 +389,7 @@
 }
 
 .list-panel-anchor ul li:hover, .list-panel-anchor ul li.selected {
-    background-color: #05addc;
+    background-color: #22A5FF;
     width: 210px;
 }
 
@@ -439,7 +431,7 @@
 }
 
 .add_flow:hover {
-    color: #05ADDC;
+    color: #22A5FF;
 }
 
 .add_flow:hover .plus_btn {
@@ -604,7 +596,7 @@
 }
 
 .list-panel-anchor ul li:hover, .list-panel-anchor ul li.selected {
-    background-color: #05addc;
+    background-color: #22A5FF;
 }
 
 .list-panel-anchor ul li a {
