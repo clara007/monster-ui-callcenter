@@ -1,7 +1,7 @@
 <div class="row-fluid">
 	<div class="span4">
 		<div class="agents-list-wrapper well-list">
-			<h3>Selected</h3>
+			<h3>{{ i18n.callcenter.settings.agentsPanel.selected }}</h3>
 			<ul id="queue-agents-list">
 				{{#if this.agents}}
 					{{#each this.agents}}
@@ -13,7 +13,7 @@
 						</li>
 					{{/each}}
 				{{else}}
-					<li class="js-empty-item empty-item">None</li>
+					<li class="js-empty-item empty-item">{{ i18n.callcenter.settings.agentsPanel.noDataText }}</li>
 				{{/if}}
 			</ul>
 		</div>
@@ -22,8 +22,8 @@
 		<table id="queue-users-table" class="table table-condensed table-striped table-hover">
 			<thead>
 				<tr>
-					<th class="no-sort">Add</th>
-					<th>User Name</th>
+					<th class="no-sort">{{ i18n.callcenter.settings.agentsPanel.actionsColumnHeader }}</th>
+					<th>{{ i18n.callcenter.settings.agentsPanel.userNameColumnHeader }}</th>
 				</tr>
 			</thead>
 			<tbody>
