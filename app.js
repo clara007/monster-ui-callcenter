@@ -952,14 +952,6 @@ var app = {
 	settingsQueueFormBindEvents: function($container) {
 		var self = this;
 
-		$container.find('.js-edit-media').on('click', function(e) {
-			e.preventDefault();
-		});
-
-		$container.find('.js-create-media').on('click', function(e) {
-			e.preventDefault();
-		});
-
 		$container.find('.js-save-queue').on('click', function(e) {
 			e.preventDefault();
 
