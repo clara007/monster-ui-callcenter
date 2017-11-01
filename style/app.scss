@@ -210,6 +210,7 @@
     background: white;
     vertical-align: top;
     width: 240px;
+    position: relative;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_header {
@@ -227,6 +228,18 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: 210px;
+}
+
+.agent_header_badge {
+    position: absolute;
+    border: 1px solid #555;
+    display: inline-block;
+    background: white;
+    color: #555;
+    border-radius: 0 5px 0 5px;
+    top: -8px;
+    right: -7px;
+    padding: 2px 8px;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_header .fa {
@@ -295,11 +308,21 @@
             width: 100%;
             box-sizing: border-box;
         }
+
+        .agent_header_badge {
+            border-width: 2px;
+            color: white;
+        }
     }
 
     &.ready {
         .row_data.call_time .data_value {
             color: #22A5FF;
+        }
+
+        .agent_header_badge {
+            border-color: white;
+            background-color: #22A5FF;
         }
     }
 
@@ -314,6 +337,11 @@
         .row_data.call_time .data_value{
             color: #ff7733;
         }
+
+
+        .agent_header_badge {
+            border-color: #ff7733;
+        }
     }
 
     &.busy {
@@ -325,6 +353,10 @@
 
         .row_data.call_time .data_value {
             color: #ffbb33;
+        }
+
+        .agent_header_badge {
+            border-color: #ffbb33;
         }
     }
 
@@ -338,6 +370,10 @@
         .row_data.call_time .data_value {
             color: #ffbb33;
         }
+
+        .agent_header_badge {
+            border-color: #ffbb33;
+        }
     }
 
     &.handling {
@@ -350,6 +386,10 @@
         .row_data.call_time .data_value{
             color: #62c462;
         }
+
+        .agent_header_badge {
+            border-color: #62c462;
+        }
     }
 
     &.connecting {
@@ -361,6 +401,10 @@
 
         .row_data.call_time .data_value{
             color: #3366cc;
+        }
+
+        .agent_header_badge {
+            border-color: #3366cc;
         }
     }
 }
