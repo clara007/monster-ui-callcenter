@@ -752,18 +752,15 @@ var app = {
 					console.log('Error');
 					console.log(err);
 				} else {
-
-					// results.media
-					// results.users
-
+					var i18n = self.i18n.active();
 					results.media.unshift(
 						{
 							id: '',
-							name: 'Default' // TODO: i18n it
+							name: i18n.callcenter.settings.mediaDefault
 						},
 						{
 							id: 'silence_stream://300000',
-							name: 'Silence' // TODO: i18n it
+							name: i18n.callcenter.settings.mediaSilence
 						}
 					);
 
@@ -986,12 +983,11 @@ var app = {
 			e.preventDefault();
 			var queueId = $(this).data('queue-id');
 
-			// TODO: i18n it!
-			monster.ui.confirm('Are you sure to remove this queue?', function() {
+			var i18n = self.i18n.active();
+			monster.ui.confirm(i18n.callcenter.settings.deleteQueueConfirmText, function() {
 				self.settingsQueueRemove(queueId, function() {
 					self.settingsRender($('#monster_content'), function(){
-						// TODO: i18n it!
-						self.settingsShowMessage('Queue was successfully removed!', 'success')
+						self.settingsShowMessage(i18n.callcenter.settings.deleteQueueSuccessMessage, 'success')
 					});
 				});
 			});
@@ -1104,7 +1100,8 @@ var app = {
 
 					self.settingsQueuesListRender(queueId, null, function() {
 						self.settingsQueueEditFormRender(queueId, function() {
-							self.settingsShowMessage('Saving complete!'); // TODO: i18n it!
+							var i18n = self.i18n.active();
+							self.settingsShowMessage(i18n.callcenter.settings.saveQueueSuccessMessage);
 							if(typeof(callback) === 'function') {
 								callback(data.data);
 							}
@@ -1124,7 +1121,8 @@ var app = {
 					console.log(data);
 					self.settingsQueuesListRender(data.data.id, null, function() {
 						self.settingsQueueEditFormRender(data.data.id, function() {
-							self.settingsShowMessage('Creating complete!'); // TODO: i18n it!
+							var i18n = self.i18n.active();
+							self.settingsShowMessage(i18n.callcenter.settings.createQueueSuccessMessage);
 							if(typeof(callback) === 'function') {
 								callback(data.data);
 							}
@@ -1154,6 +1152,7 @@ var app = {
 			success: function (data, status) {
 				console.log(data);
 
+				var i18n = self.i18n.active();
 
 				var map_crossbar_data = function(data) {
 					var new_list = [];
@@ -1162,7 +1161,7 @@ var app = {
 						$.each(data, function(key, val) {
 							new_list.push({
 								id: val.id,
-								title: val.name || 'No name' // TODO: i18n it!
+								title: val.name || i18n.callcenter.settings.queueDefaultName
 							});
 						});
 					}

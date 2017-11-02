@@ -67,7 +67,14 @@
 			},
 			"saveQueueButtonText": "Save Changes",
 			"deleteQueueButtonText": "Delete Queue",
-			"createQueueButtonText": "Create"
+			"createQueueButtonText": "Create",
+			"deleteQueueConfirmText": "Are you sure to remove this queue?",
+			"deleteQueueSuccessMessage": "Queue was successfully removed!",
+			"saveQueueSuccessMessage": "Saving complete!",
+			"createQueueSuccessMessage": "Creating complete!",
+			"queueDefaultName": "No name",
+			"mediaDefault": "Default",
+			"mediaSilence": "Silence"
 		},
 		"headerMenu": {
 			"dashboard": "Dashboard",

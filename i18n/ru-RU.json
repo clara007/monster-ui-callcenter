@@ -67,7 +67,14 @@
 			},
 			"saveQueueButtonText": "Сохранить изменения",
 			"deleteQueueButtonText": "Удалить очередь",
-			"createQueueButtonText": "Создать очередь"
+			"createQueueButtonText": "Создать очередь",
+			"deleteQueueConfirmText": "Вы действительно хотите удалить очередь?",
+			"deleteQueueSuccessMessage": "Очередь успешно удалена",
+			"saveQueueSuccessMessage": "Очередь сохранена",
+			"createQueueSuccessMessage": "Очередь успешно создана",
+			"queueDefaultName": "Без имени",
+			"mediaDefault": "По-умолчанию",
+			"mediaSilence": "Без звука"
 		},
 		"headerMenu": {
 			"dashboard": "Инфо-панель",
