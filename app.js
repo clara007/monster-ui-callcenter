@@ -1,6 +1,5 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
 		monster = require('monster'),
 		toastr = require('toastr');
 
@@ -32,12 +31,13 @@ var app = {
 	},
 
 	requests: {
-		/* move here all unstandart request
-
-		'google.getUser': {
-			apiRoot: 'http://api.google.com/',
-			url: 'users',
-			verb: 'PUT'
+		/*'callcenter.agent_in_queue_status.get': {
+			url: 'accounts/{accountId}/agents/{agentId}/status', // queue_status
+			verb: 'GET'
+		},
+		'callcenter.agent_in_queue_status.set': {
+			url: 'accounts/{accountId}/agents/{agentId}/status',
+			verb: 'POST'
 		}*/
 	},
 
@@ -50,7 +50,6 @@ var app = {
 	},
 
 	global_timer: false,
-	current_queue_id: undefined,
 	hide_logout: false,
 	map_timers: {
 		calls_waiting: {},
@@ -136,7 +135,8 @@ var app = {
 		self.callApi({
 			resource: 'queues.queue_eavesdrop',
 			data: {
-				accountId: self.accountId
+				accountId: self.accountId,
+				generateError: false
 			},
 			success: function (queue_eavesdrop) {
 				callback(queue_eavesdrop.data);
@@ -158,6 +158,8 @@ var app = {
 	},*/
 
 	poll_agents: function (global_data, _container) {
+		console.log('Poll agents. Data:');
+		console.log(global_data);
 		var self = this,
 			container = _container,
 			polling_interval = 6,
@@ -172,45 +174,48 @@ var app = {
 					queues: current_global_data.queues
 				}); //copy without reference;
 				if (stop_light_polling === false) {
-					monster.parallel(
-						{
-							queues_livestats: function (callback) {
-								self.get_queues_livestats(function (_data_live_queues) {
-									callback(null, _data_live_queues);
+					monster.parallel({
+							queues_stats: function (callback) {
+								self.get_queues_stats(function (data) {
+									callback(null, data);
 								});
 							},
-							agents_livestats: function (callback) {
-								self.get_agents_livestats(function (_data_live_agents) {
-									callback(null, _data_live_agents);
+							agents_stats: function (callback) {
+								self.get_agents_stats(function (data) {
+									callback(null, data);
 								});
 							},
 							agents_status: function (callback) {
-								self.get_agents_status(function (_data_live_status) {
-										callback(null, _data_live_status);
+								self.get_agents_status(function (data) {
+										callback(null, data);
 									},
-									function (_data_live_status) {
+									function (data) {
 										callback(null, {});
 									}
 								);
 							}
 						},
 						function (err, results) {
+							console.log('Poll agents. Results:');
+							console.log(results);
 							data_template = self.format_live_data(data_template, {
-								agents_live_stats: results.agents_livestats,
-								queues_live_stats: results.queues_livestats,
-								agents_live_status: results.agents_status
+								agents_stats: results.agents_stats,
+								queues_stats: results.queues_stats,
+								agents_status: results.agents_status
 							});
+							self.dashboardUpdateAllData(null, data_template, self.vars.queue_id);
 						}
 					);
 				}
 			},
 			huge_poll = function () {
+				console.log('huge_poll');
 				if ($('#dashboard-content').size() === 0) {
 					self.clean_timers();
-				}
-				else {
+				} else {
 					if (++cpt % 30 === 0) {
 						self.fetch_all_data(function (data) {
+							self.dashboardUpdateAllData(null, data, self.vars.queue_id);
 							current_global_data = data;
 						});
 					}
@@ -227,16 +232,17 @@ var app = {
 		self.global_timer = setInterval(huge_poll, polling_interval * 1000);
 	},
 
-	get_queues_livestats: function (callback) {
+	get_queues_stats: function (callback) {
 		var self = this;
 
 		self.callApi({
-			resource: 'queues.queues_livestats',
+			resource: 'queues.queues_stats',
 			data: {
-				accountId: self.accountId
+				accountId: self.accountId,
+				generateError: false
 			},
-			success: function (queue_livestats) {
-				callback(queue_livestats.data);
+			success: function (data) {
+				callback(data.data);
 			}
 		});
 	},
@@ -247,24 +253,13 @@ var app = {
 		self.callApi({
 			resource: 'agents.agents_status',
 			data: {
-				accountId: self.accountId
+				accountId: self.accountId,
+				generateError: false
 			},
-			success: function (agents_status) {
-				callback(agents_status.data);
-			}
-		});
-	},
-
-	get_agents_livestats: function (callback) {
-		var self = this;
-
-		self.callApi({
-			resource: 'agents.agents_livestats',
-			data: {
-				accountId: self.accountId
-			},
-			success: function (agents_livestats) {
-				callback(agents_livestats.data);
+			success: function (data) {
+				console.log('Agents status response:');
+				console.log(data);
+				callback(data.data);
 			}
 		});
 	},
@@ -273,12 +268,15 @@ var app = {
 		var self = this;
 
 		self.callApi({
-			resource: 'agents.agents_status',
+			resource: 'agents.agents_stats',
 			data: {
-				accountId: self.accountId
+				accountId: self.accountId,
+				generateError: false
 			},
-			success: function (agents_status) {
-				callback(agents_status.data);
+			success: function (data) {
+				console.log('Agents stats response:');
+				console.log(data);
+				callback(data.data);
 			}
 		});
 	},
@@ -303,7 +301,8 @@ var app = {
 		self.callApi({
 			resource: 'queues.queues_list',
 			data: {
-				accountId: self.accountId
+				accountId: self.accountId,
+				generateError: false
 			},
 			success: function (data) {
 				callback && callback(data.data);
@@ -317,7 +316,8 @@ var app = {
 		self.callApi({
 			resource: 'agents.agents_list',
 			data: {
-				accountId: self.accountId
+				accountId: self.accountId,
+				generateError: false
 			},
 			success: function (agents) {
 				callback(agents.data);
@@ -338,11 +338,14 @@ var app = {
 	},*/
 
 	get_time_seconds: function (seconds) {
-		var seconds = Math.floor(seconds),
-			hours = Math.floor(seconds / 3600),
+		seconds = Math.floor(seconds);
+		var hours = Math.floor(seconds / 3600),
 			minutes = Math.floor(seconds / 60) % 60,
 			remaining_seconds = seconds % 60,
-			display_time = (hours < 10 ? '0' + hours : '' + hours) + ':' + (minutes < 10 ? '0' + minutes : '' + minutes) + ':' + (remaining_seconds < 10 ? '0' + remaining_seconds : '' + remaining_seconds);
+			display_time = (hours < 10 ? '0' + hours : '' + hours)
+				+ ':' + (minutes < 10 ? '0' + minutes : '' + minutes)
+				+ ':' + (remaining_seconds < 10 ? '0' + remaining_seconds : ''
+				+ remaining_seconds);
 
 		return seconds >= 0 ? display_time : '00:00:00';
 	},
@@ -352,7 +355,7 @@ var app = {
 		var self = this,
 
 			current_agents_by_queue = {};
-		formatted_data.current_timestamp = data.queues_live_stats.current_timestamp;
+		formatted_data.current_timestamp = data.queues_stats.current_timestamp;
 		formatted_data.calls_waiting = {};
 		formatted_data.calls_in_progress = {};
 		formatted_data.agent_status = {
@@ -370,8 +373,8 @@ var app = {
 			queue.total_wait_time = 0;
 		});
 
-		if(data.agents_live_status) {
-			$.each(data.agents_live_status, function(k, agent_status) {
+		if(data.agents_status) {
+			$.each(data.agents_status, function(k, agent_status) {
 				if(k in formatted_data.agents) {
 					if(agent_status.status === 'outbound') {
 						agent_status.status = 'busy';
@@ -428,7 +431,7 @@ var app = {
 			}
 		});
 
-		$.each(data.agents_live_stats, function(k, agent_stats) {
+		$.each(data.agents_stats, function(k, agent_stats) {
 			if(k in formatted_data.agents) {
 				formatted_data.agents[k].missed_calls = agent_stats.missed_calls || 0;
 				formatted_data.agents[k].total_calls = agent_stats.total_calls || 0;
@@ -447,8 +450,8 @@ var app = {
 			}
 		});
 
-		if('stats' in data.queues_live_stats) {
-			$.each(data.queues_live_stats.stats, function(index, queue_stats) {
+		if('stats' in data.queues_stats) {
+			$.each(data.queues_stats.stats, function(index, queue_stats) {
 				var k = queue_stats.queue_id,
 					call_id = queue_stats.call_id;
 
@@ -496,6 +499,7 @@ var app = {
 	},
 
 	format_data: function(data) {
+		console.log('format data');
 		var self = this,
 			formatted_data = {};
 		/* Formatting Queues */
@@ -548,33 +552,160 @@ var app = {
 		self.accountId = monster.apps.auth.accountId;
 
 		self.clean_timers();
+		self.dashboardRender(_container);
+		self.initHeaderSubmenu();
+	},
+
+	dashboardRender: function($container) {
+		console.log('Dashboard - Render');
+		var self = this;
 
 		self.fetch_all_data(function(data) {
+			self.dashboardUpdateAllData($container, data, self.vars.queue_id, function(data){
+				self.poll_agents(data, $container);
+			});
+		});
+	},
 
-			var queues_html = $(monster.template(self, 'queues_dashboard', {queues: data.queues}));
-			var agents_html = $(monster.template(self, 'agents_dashboard', {agents: data.agents}));
-			var calls_html = $(monster.template(self, 'calls_dashboard', {progress: data.calls_in_progress, waits: data.calls_waiting} ));
+	dashboardUpdateAllData: function($container, data, queueId, callback) {
+		console.log('Dashboard - Update all data');
+		console.log('Queue id:');
+		console.log(queueId);
+		var self = this;
+		$container = $container || $('#monster_content');
 
-			var html = $(monster.template(self, 'dashboard', {}));
-			container.empty().append(html);
+		var queues_html = $(monster.template(self, 'queues_dashboard', {
+			queues: data.queues
+		}));
 
-			var scroll_value = $('.topbar-right .list_queues_inner', container).scrollLeft() || 0;
-			container.find('#dashboard-view').empty().append(agents_html);
-			container.find('.topbar-right').empty().append(queues_html);
-			container.find('.topbar-right .list_queues_inner').animate({ scrollLeft: scroll_value }, 0);
-			container.find('#callwaiting-list').append(calls_html);
+		var agents_html = $(monster.template(self, 'agents_dashboard', {
+			agents: data.agents
+		}));
 
-			self.poll_agents(data, container);
-			(container).empty().append(html);
-			self.bind_live_events(container);
+		var calls_html = $(monster.template(self, 'calls_dashboard', {
+			progress: data.calls_in_progress,
+			waits: data.calls_waiting
+		}));
 
-			if(typeof queue_id != 'undefined') {
-				self.detail_stat(queue_id, container);
+		var html = $(monster.template(self, 'dashboard', {}));
+		$container.empty().append(html);
+
+		var scroll_value = $('.topbar-right .list_queues_inner', $container).scrollLeft() || 0;
+		$container.find('#dashboard-view').empty().append(agents_html);
+		$container.find('.topbar-right').empty().append(queues_html);
+		$container.find('.topbar-right .list_queues_inner').animate({ scrollLeft: scroll_value }, 0);
+		$container.find('#callwaiting-list').append(calls_html);
+
+		// self.render_callwaiting_list(dashboard_html);
+		$container.empty().append(html);
+		self.bind_live_events($container);
+		self.render_timers(data);
+
+		if(typeof(queueId) !== 'undefined') {
+			self.detail_stat(queueId, $container);
+		}
+		self.dashboardBindEvents($container);
+
+		if(typeof(callback) === 'function') {
+			callback(data);
+		}
+	},
+
+	render_timers: function(data) {
+		var self = this;
+
+		$.each(self.map_timers, function(type, list_timers) {
+			$.each(list_timers, function(k, v) {
+				clearInterval(v.timer);
+			});
+		});
+
+		self.map_timers = {
+			waiting: {},
+			in_progress: {}
+		};
+
+		if(data.calls_waiting) {
+			$.each(data.calls_waiting, function(k, v) {
+				v.duration = data.current_timestamp - v.entered_timestamp;
+				self.start_timer('waiting', {data: v, id: k});
+			});
+		}
+
+		if(data.calls_in_progress) {
+			$.each(data.calls_in_progress, function(k, v) {
+				v.duration = data.current_timestamp - v.handled_timestamp;
+				self.start_timer('in_progress', {data: v, id: v.agent_id});
+			});
+		}
+
+		if(data.agent_status) {
+			if('busy' in data.agent_status) {
+				$.each(data.agent_status.busy, function(agent_id, data_status) {
+					data_status.duration = data.current_timestamp - data_status.timestamp;
+					self.start_timer('agent_status', {data: data_status, id: agent_id});
+				});
 			}
 
-			self.dashboardBindEvents(container);
-			self.initHeaderSubmenu();
-		});
+			if('wrapup' in data.agent_status) {
+				$.each(data.agent_status.wrapup, function(agent_id, data_status) {
+					data_status.duration = data_status.wait_time - (data.current_timestamp - data_status.timestamp);
+					self.start_timer('agent_status', {data: data_status, id: agent_id}, 'decrement');
+				});
+			}
+
+			if('paused' in data.agent_status) {
+				$.each(data.agent_status.paused, function(agent_id, data_status) {
+					if('pause_time' in data_status) {
+						data_status.duration = data_status.pause_time - (data.current_timestamp - data_status.timestamp);
+						self.start_timer('agent_status', {data: data_status, id: agent_id}, 'decrement');
+					}
+					else {
+						data_status.duration = data.current_timestamp - data_status.timestamp;
+						self.start_timer('agent_status', {data: data_status, id: agent_id});
+					}
+				});
+			}
+		}
+	},
+
+	start_timer: function(type, _data, _timer_type) {
+		var self = this,
+			$target,
+			id = _data.id,
+			data = _data.data,
+			timer_type = _timer_type || 'increment';
+
+		if(type === 'in_progress' || type === 'agent_status') {
+			$target = $('.agent_wrapper#'+id+' .call_time .data_value');
+		} else if(type === 'waiting') {
+			$target = $('.call-waiting[data-call_id="'+id+'"] .timer');
+		}
+
+		if(!self.map_timers[type]) {
+			self.map_timers[type] = {};
+		}
+
+		self.map_timers[type][id] = data;
+
+		self.map_timers[type][id].timer = setInterval(function(){
+			if($target.size() > 0) {
+				if(timer_type === 'decrement') {
+					var new_duration = --self.map_timers[type][id].duration;
+					$target.html(self.get_time_seconds(new_duration > 0 ? new_duration : 0));
+				}
+				else {
+					if(self.map_timers[type]) {
+						$target.html(self.get_time_seconds(++self.map_timers[type][id].duration));
+					}
+				}
+			} else {
+				if(self.map_timers[type][id]) {
+					clearInterval(self.map_timers[type][id].timer);
+					delete self.map_timers[type][id];
+				}
+			}
+		}, 1000);
 	},
 
 	dashboardBindEvents: function($container) {
@@ -689,7 +820,7 @@ var app = {
 			connection_timeout: '0',
 			member_timeout: '5',
 			agent_wrapup_time: '30',
-			record_caller: true,
+			record_caller: false,
 			moh: {},
 			notifications: {},
 			max_queue_size: '0'
@@ -728,7 +859,8 @@ var app = {
 					self.callApi({
 						resource: 'user.list',
 						data: {
-							accountId: self.accountId
+							accountId: self.accountId,
+							generateError: false
 						},
 						success: function (users) {
 							callback(null, users.data);
@@ -739,7 +871,8 @@ var app = {
 					self.callApi({
 						resource: 'media.list',
 						data: {
-							accountId: self.accountId
+							accountId: self.accountId,
+							generateError: false
 						},
 						success: function(media, status) {
 							callback(null, media.data);
@@ -770,6 +903,8 @@ var app = {
 					}));
 
 					self.vars.users = results.users;
+					console.log('Users:');
+					console.log(results.users);
 
 					$container.empty().append(html);
 					self.settingsQueueFormBindEvents($container);
@@ -1001,7 +1136,8 @@ var app = {
 			resource: 'queues.queues_delete',
 			data: {
 				accountId: self.accountId,
-				queuesId: queueId
+				queuesId: queueId,
+				generateError: false
 			},
 			success: function(data, status) {
 				if(typeof(callback) === 'function') {
@@ -1018,6 +1154,7 @@ var app = {
 			resource: 'agents.agents_update',
 			data: {
 				accountId: self.accountId,
+				generateError: false,
 				queuesId: queueId,
 				data: agentsIdList
 			},
@@ -1092,6 +1229,7 @@ var app = {
 				resource: 'queues.queues_update',
 				data: {
 					accountId: self.accountId,
+					generateError: false,
 			 		queuesId: queueId,
 					data: queueData
 				},
@@ -1115,6 +1253,7 @@ var app = {
 				resource: 'queues.queues_create',
 				data: {
 					accountId: self.accountId,
+					generateError: false,
 					data: queueData
 				},
 				success: function(data, status) {
@@ -1147,7 +1286,8 @@ var app = {
 		self.callApi({
 			resource: 'queues.queues_list',
 			data: {
-				accountId: self.accountId
+				accountId: self.accountId,
+				generateError: false
 			},
 			success: function (data, status) {
 				console.log(data);
@@ -1219,6 +1359,7 @@ var app = {
 			resource: 'queues.queues_get',
 			data: {
 				accountId: self.accountId,
+				generateError: false,
 				queuesId: queueId
 			},
 			success: function(data, status) {
@@ -1231,24 +1372,25 @@ var app = {
 	},
 
 	fetch_all_data: function(callback) {
+		console.log('Fetch all data');
 		var self = this;
 
 		monster.parallel({
-			queues_livestats: function(callback) {
-				self.get_queues_livestats(function(_data_live_queues) {
-					callback(null, _data_live_queues);
+			queues_stats: function(callback) {
+				self.get_queues_stats(function(data) {
+					callback(null, data);
 				});
 			},
-			agents_livestats: function(callback) {
-				self.get_agents_livestats(function(_data_live_agents) {
-					callback(null, _data_live_agents);
+			agents_stats: function(callback) {
+				self.get_agents_stats(function(data) {
+					callback(null, data);
 				});
 			},
 			agents_status: function(callback) {
-				self.get_agents_status(function(_data_live_status) {
-						callback(null, _data_live_status);
+				self.get_agents_status(function(data) {
+						callback(null, data);
 					},
-					function(_data_live_status) {
+					function(data) {
 						callback(null, {});
 					}
 				);
@@ -1268,9 +1410,9 @@ var app = {
 			var _data = {
 				queues: results.queues,
 				agents: results.agents,
-				agents_live_stats: results.agents_livestats,
-				queues_live_stats: results.queues_livestats,
-				agents_live_status: results.agents_status
+				agents_stats: results.agents_stats,
+				queues_stats: results.queues_stats,
+				agents_status: results.agents_status
 			};
 
 			_data = self.format_data(_data);
@@ -1285,13 +1427,13 @@ var app = {
 		var self = this;
 
 		// list of queues
-		$('.list_queues_inner > li', container).on('click', function(event) {
+		$('.list_queues_inner > li', container).on('click', function(e) {
+			var $queueEl = $(this);
 
-			queue_id = this.id;
-			var $self_queue = $(self);
+			self.vars.queue_id = $queueEl.attr('id');
 
-			if($self_queue.hasClass('active')) {
-				self.current_queue_id = undefined;
+			if($queueEl.hasClass('active')) {
+				self.vars.queue_id = undefined;
 				$('.agent_wrapper', container).css('display', 'inline-block');
 				$('.all_data', container).show();
 				$('.queue_data', container).hide();
@@ -1300,17 +1442,78 @@ var app = {
 				$('.icon.eavesdrop_queue', container).hide();
 				$('.list_queues_inner > li', container).removeClass('active');
 			} else {
-				self.detail_stat(queue_id, container);
+				self.detail_stat(self.vars.queue_id, container);
 			}
 		});
 
+		$('.js-login-to-queue', container).click(function(e) {
+			e.preventDefault();
+			var agentId = $(this).closest('.agent_wrapper').attr('id');
+
+			self.changeAgentInQueueStatus(agentId, 'login', function(data) {
+				console.log('Agent login to queue');
+				console.log(data);
+			});
+		});
+
+		$('.js-logout-from-queue', container).click(function(e) {
+			e.preventDefault();
+			var agentId = $(this).closest('.agent_wrapper').attr('id');
+
+			self.changeAgentInQueueStatus(agentId, 'logout', function(data) {
+				console.log('Agent logout from queue');
+				console.log(data);
+			});
+		});
+	},
+
+	changeAgentInQueueStatus: function(agentId, status, callback) {
+		var self = this;
+
+		if(status !== 'login' && status !== 'logout') {
+			console.log('Unknown agent status: ' + status);
+			return;
+		}
+
+		monster.request({
+			resource: 'agents.agents_toggle',
+			data: {
+				accountId: self.accountId,
+				agentId: agentId,
+				generateError: false,
+				data: {
+					status: 'login'
+				}
+			},
+			success: function (data) {
+				console.log(data);
+				if(typeof(callback) === 'function') {
+					callback(data);
+				}
+
+				monster.request({
+					resource: 'callcenter.agent_in_queue_status.get',
+					data: {
+						accountId: self.accountId,
+						agentId: agentId,
+						generateError: false
+					},
+					success: function (data) {
+						console.log(data);
+					}
+				});
+			}
+		});
 	},
 
 	detail_stat: function(queue_id, container) {
+		console.log('Detail stat');
+		console.log('Queue id:');
+		console.log(queue_id);
 		var self = this,
-			$self_queue = $('#'+queue_id, container);
+			$self_queue = $('#' + queue_id, container);
 
-		self.current_queue_id = queue_id;
+		self.vars.queue_id = queue_id;
 
 		$('.list_queues_inner > li', container).removeClass('active');
 		$self_queue.addClass('active');
@@ -1324,72 +1527,89 @@ var app = {
 				$v.show();
 			}
 		});
+
+		$('.agent_wrapper', container).each(function(k, v) {
+			var $v = $(v);
+
+			if($v.data('queues').indexOf(queue_id) < 0) {
+				$v.hide();
+			} else {
+				if(!self.hide_logout) {
+					$v.css('display', 'inline-block');
+				}
+				$('.all_data', $v).hide();
+				$('.queue_stat', $v).hide();
+				$('.queue_stat[data-id=' + queue_id + ']', $v).show();
+				$('.queue_data', $v).show();
+			}
+		});
 	},
 
 	clean_timers: function() {
 		var self = this;
 
-			if(self.global_timer !== false) {
-				clearInterval(self.global_timer);
-				self.global_timer = false;
-			}
+		if(self.global_timer !== false) {
+			clearInterval(self.global_timer);
+			self.global_timer = false;
+		}
 
-			$.each(self.map_timers, function(type, list_timers) {
-				$.each(list_timers, function(k, v) {
-					clearInterval(v.timer);
-				});
+		$.each(self.map_timers, function(type, list_timers) {
+			$.each(list_timers, function(k, v) {
+				clearInterval(v.timer);
 			});
+		});
 
-			self.map_timers = {};
-		},
+		self.map_timers = {};
+	},
 
-		/*activate_queue_stat: function(args) {
-			//TODO check render global data
-			var self = this,
-			container = args.container || $('#monster-content');
-			container.empty();
-			self.render(container, function() {
-				var $self_queue = $('#'+args.id, container);
-				self.detail_stat(args.id, container);
-			});
-		},*/
+	activate_queue_stat: function(args) {
+		//TODO check render global data
+		var self = this,
+		container = args.container || $('#monster-content');
+		container.empty();
+		self.render(container, function() {
+			var $self_queue = $('#'+args.id, container);
+			self.detail_stat(args.id, container);
+		});
+	},
 
-		/*activate: function(_container) {
-			var self = this,
-			container = _container || $('#monster-content');
-			container.empty();
-			self.current_queue_id = undefined;
-			self.hide_logout = false;
-			//TODO check render global data
-			self.render(container);
-		},*/
+	/*activate: function(_container) {
+		var self = this,
+		container = _container || $('#monster-content');
+		container.empty();
+		self.current_queue_id = undefined;
+		self.hide_logout = false;
+		//TODO check render global data
+		self.render(container);
+	},*/
 
-		login: function(agent, callback) {
-			var self = this,
-			agentId = $(agent).attr('id');
-			self.callApi({
-					resource: 'agents.agents_toggle',
-					data: {
-						accountId: self.accountId,
-						agentId: agentId,
-						data: {status: 'login'}
-					}
-			});
-		},
-
-		logout: function(agent, callback) {
-			var self = this,
-			agentId = $(agent).attr('id');
-			self.callApi({
+	login: function(agent, callback) {
+		var self = this,
+		agentId = $(agent).attr('id');
+		self.callApi({
 				resource: 'agents.agents_toggle',
 				data: {
 					accountId: self.accountId,
+					generateError: false,
 					agentId: agentId,
-					data: {status: 'logout'}
+					data: {status: 'login'}
 				}
-			});
-		}
-	};
+		});
+	},
+
+	logout: function(agent, callback) {
+		var self = this,
+		agentId = $(agent).attr('id');
+		self.callApi({
+			resource: 'agents.agents_toggle',
+			data: {
+				accountId: self.accountId,
+				agentId: agentId,
+				generateError: false,
+				data: {status: 'logout'}
+			}
+		});
+	}};
 
 	return app;
 });
