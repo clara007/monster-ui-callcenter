@@ -218,8 +218,7 @@ var app = {
 							self.dashboardUpdateAllData(null, data, self.vars.queue_id);
 							current_global_data = data;
 						});
-					}
-					else {
+					} else {
 						poll();
 					}
 				}
@@ -1448,9 +1447,8 @@ var app = {
 
 		$('.js-login-to-queue', container).click(function(e) {
 			e.preventDefault();
-			var agentId = $(this).closest('.agent_wrapper').attr('id');
 
-			self.changeAgentInQueueStatus(agentId, 'login', function(data) {
+			self.changeAgentInQueueStatus($(this), 'login', function(data) {
 				console.log('Agent login to queue');
 				console.log(data);
 			});
@@ -1458,16 +1456,15 @@ var app = {
 
 		$('.js-logout-from-queue', container).click(function(e) {
 			e.preventDefault();
-			var agentId = $(this).closest('.agent_wrapper').attr('id');
 
-			self.changeAgentInQueueStatus(agentId, 'logout', function(data) {
+			self.changeAgentInQueueStatus($(this), 'logout', function(data) {
 				console.log('Agent logout from queue');
 				console.log(data);
 			});
 		});
 	},
 
-	changeAgentInQueueStatus: function(agentId, status, callback) {
+	changeAgentInQueueStatus: function($btn, status, callback) {
 		var self = this;
 
 		if(status !== 'login' && status !== 'logout') {
@@ -1475,14 +1472,18 @@ var app = {
 			return;
 		}
 
-		monster.request({
+		var agentId = $btn.closest('.agent_wrapper').attr('id');
+		$btn.parent().find('.preloader').remove();
+		$('<span class="preloader"></span>').insertAfter($btn);
+
+		self.callApi({
 			resource: 'agents.agents_toggle',
 			data: {
 				accountId: self.accountId,
 				agentId: agentId,
 				generateError: false,
 				data: {
-					status: 'login'
+					status: status
 				}
 			},
 			success: function (data) {
@@ -1490,18 +1491,11 @@ var app = {
 				if(typeof(callback) === 'function') {
 					callback(data);
 				}
-
-				monster.request({
-					resource: 'callcenter.agent_in_queue_status.get',
-					data: {
-						accountId: self.accountId,
-						agentId: agentId,
-						generateError: false
-					},
-					success: function (data) {
-						console.log(data);
-					}
-				});
+			},
+			error: function() {
+				if(typeof(callback) === 'function'){
+					callback();
+				}
 			}
 		});
 	},
@@ -1571,7 +1565,7 @@ var app = {
 			var $self_queue = $('#'+args.id, container);
 			self.detail_stat(args.id, container);
 		});
-	},
+	}
 
 	/*activate: function(_container) {
 		var self = this,
@@ -1583,33 +1577,7 @@ var app = {
 		self.render(container);
 	},*/
 
-	login: function(agent, callback) {
-		var self = this,
-		agentId = $(agent).attr('id');
-		self.callApi({
-				resource: 'agents.agents_toggle',
-				data: {
-					accountId: self.accountId,
-					generateError: false,
-					agentId: agentId,
-					data: {status: 'login'}
-				}
-		});
-	},
-
-	logout: function(agent, callback) {
-		var self = this,
-		agentId = $(agent).attr('id');
-		self.callApi({
-			resource: 'agents.agents_toggle',
-			data: {
-				accountId: self.accountId,
-				agentId: agentId,
-				generateError: false,
-				data: {status: 'logout'}
-			}
-		});
-	}};
+	};
 
 	return app;
 });

@@ -1,6 +1,16 @@
 @import url('../../../css/vendor/jquery/jquery.dataTables.css');
 
 /* Top bar */
+#dashboard-content {
+	.preloader {
+		background: url('static/images/preloader.gif') no-repeat;
+		display: inline-block;
+		width: 30px;
+		height: 30px;
+		vertical-align: top;
+	}
+}
+
 #dashboard-content #dashboard-topbar .settings-bar {
     background: #B1AFAF;
     cursor: pointer;
@@ -211,6 +221,18 @@
     vertical-align: top;
     width: 240px;
     position: relative;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .btn-login {
+	border-color: #22A5FF;
+	background: #22A5FF;
+	color: white;
+	text-shadow: none;
+}
+
+#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .btn-login i.icon-small {
+	color: white;
+	margin-right: 5px;
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_header {
