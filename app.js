@@ -552,7 +552,6 @@ var app = {
 
 		self.clean_timers();
 		self.dashboardRender(_container);
-		self.initHeaderSubmenu();
 	},
 
 	dashboardRender: function($container) {
@@ -604,6 +603,7 @@ var app = {
 			self.detail_stat(queueId, $container);
 		}
 		self.dashboardBindEvents($container);
+		self.initHeaderSubmenu();
 
 		if(typeof(callback) === 'function') {
 			callback(data);
