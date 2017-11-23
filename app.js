@@ -31,14 +31,6 @@ var app = {
 	},
 
 	requests: {
-		/*'callcenter.agent_in_queue_status.get': {
-			url: 'accounts/{accountId}/agents/{agentId}/status', // queue_status
-			verb: 'GET'
-		},
-		'callcenter.agent_in_queue_status.set': {
-			url: 'accounts/{accountId}/agents/{agentId}/status',
-			verb: 'POST'
-		}*/
 		'callcenter.queue.eavesdrop': {
 			'verb': 'PUT',
 			'url': 'accounts/{accountId}/queues/{queueId}/eavesdrop'
@@ -46,6 +38,50 @@ var app = {
 		'callcenter.call.eavesdrop': {
 			'verb': 'PUT',
 			'url': 'accounts/{accountId}/queues/eavesdrop'
+		},
+		'callcenter.queues.list': {
+			'verb': 'GET',
+			'url': 'accounts/{accountId}/queues'
+		},
+		'callcenter.queues.create': {
+			'verb': 'PUT',
+			'url': 'accounts/{accountId}/queues'
+		},
+		'callcenter.queues.get': {
+			'verb': 'GET',
+			'url': 'accounts/{accountId}/queues/{queuesId}'
+		},
+		'callcenter.queues.update': {
+			'verb': 'POST',
+			'url': 'accounts/{accountId}/queues/{queuesId}'
+		},
+		'callcenter.queues.delete': {
+			'verb': 'DELETE',
+			'url': 'accounts/{accountId}/queues/{queuesId}'
+		},
+		'callcenter.queues.stats': {
+			'verb': 'GET',
+			'url': 'accounts/{accountId}/queues/stats'
+		},
+		'callcenter.agents.stats': {
+			'verb': 'GET',
+			'url': 'accounts/{accountId}/agents/stats'
+		},
+		'callcenter.agents.status': {
+			'verb': 'GET',
+			'url': 'accounts/{accountId}/agents/status'
+		},
+		'callcenter.agents.toggle': {
+			'verb': 'POST',
+			'url': 'accounts/{accountId}/agents/{agentId}/status'
+		},
+		'callcenter.agents.list': {
+			'verb': 'GET',
+			'url': 'accounts/{accountId}/agents'
+		},
+		'callcenter.agents.update': {
+			'verb': 'POST',
+			'url': 'accounts/{accountId}/queues/{queuesId}/roster'
 		}
 	},
 
@@ -140,8 +176,8 @@ var app = {
 	queue_eavesdrop: function (callback) {
 		var self = this;
 
-		self.callApi({
-			resource: 'queues.queue_eavesdrop',
+		monster.request({
+			resource: 'callcenter.queue.eavesdrop',
 			data: {
 				accountId: self.accountId,
 				generateError: false
@@ -302,8 +338,8 @@ var app = {
 	get_queues_stats: function (callback) {
 		var self = this;
 
-		self.callApi({
-			resource: 'queues.queues_stats',
+		monster.request({
+			resource: 'callcenter.queues.stats',
 			data: {
 				accountId: self.accountId,
 				generateError: false
@@ -317,8 +353,8 @@ var app = {
 	get_agents_status: function (callback) {
 		var self = this;
 
-		self.callApi({
-			resource: 'agents.agents_status',
+		monster.request({
+			resource: 'callcenter.agents.status',
 			data: {
 				accountId: self.accountId,
 				generateError: false
@@ -334,8 +370,8 @@ var app = {
 	get_agents_stats: function (callback) {
 		var self = this;
 
-		self.callApi({
-			resource: 'agents.agents_stats',
+		monster.request({
+			resource: 'callcenter.agents.stats',
 			data: {
 				accountId: self.accountId,
 				generateError: false
@@ -351,8 +387,8 @@ var app = {
 	/*get_queues_stats: function (callback) {
 		var self = this;
 
-		self.callApi({
-			resource: 'queues.queues_stats',
+		monster.request({
+			resource: 'callcenter.queues.stats',
 			data: {
 				accountId: self.accountId
 			},
@@ -365,8 +401,8 @@ var app = {
 	get_queues: function (callback) {
 		var self = this;
 
-		self.callApi({
-			resource: 'queues.queues_list',
+		monster.request({
+			resource: 'callcenter.queues.list',
 			data: {
 				accountId: self.accountId,
 				generateError: false
@@ -380,8 +416,8 @@ var app = {
 	get_agents: function (callback) {
 		var self = this;
 
-		self.callApi({
-			resource: 'agents.agents_list',
+		monster.request({
+			resource: 'callcenter.agents.list',
 			data: {
 				accountId: self.accountId,
 				generateError: false
@@ -1199,8 +1235,8 @@ var app = {
 	settingsQueueRemove: function(queueId, callback) {
 		var self = this;
 
-		self.callApi({
-			resource: 'queues.queues_delete',
+		monster.request({
+			resource: 'callcenter.queues.delete',
 			data: {
 				accountId: self.accountId,
 				queuesId: queueId,
@@ -1217,8 +1253,8 @@ var app = {
 	settingsAgentsSave: function(queueId, agentsIdList, callback) {
 		var self = this;
 
-		self.callApi({
-			resource: 'agents.agents_update',
+		monster.request({
+			resource: 'callcenter.agents.update',
 			data: {
 				accountId: self.accountId,
 				generateError: false,
@@ -1292,8 +1328,8 @@ var app = {
 
 		if(queueId) {
 			// Edit exist queue
-			self.callApi({
-				resource: 'queues.queues_update',
+			monster.request({
+				resource: 'callcenter.queues.update',
 				data: {
 					accountId: self.accountId,
 					generateError: false,
@@ -1316,8 +1352,8 @@ var app = {
 			});
 		} else {
 			// Create new queue
-			self.callApi({
-				resource: 'queues.queues_create',
+			monster.request({
+				resource: 'callcenter.queues.create',
 				data: {
 					accountId: self.accountId,
 					generateError: false,
@@ -1350,8 +1386,8 @@ var app = {
 			$parent = $('#queues-list-container');
 		}
 
-		self.callApi({
-			resource: 'queues.queues_list',
+		monster.request({
+			resource: 'callcenter.queues.list',
 			data: {
 				accountId: self.accountId,
 				generateError: false
@@ -1422,8 +1458,8 @@ var app = {
 			return;
 		}
 
-		self.callApi({
-			resource: 'queues.queues_get',
+		monster.request({
+			resource: 'callcenter.queues.get',
 			data: {
 				accountId: self.accountId,
 				generateError: false,
@@ -1567,8 +1603,8 @@ var app = {
 		$btn.parent().find('.preloader').remove();
 		$('<span class="preloader"></span>').insertAfter($btn);
 
-		self.callApi({
-			resource: 'agents.agents_toggle',
+		monster.request({
+			resource: 'callcenter.agents.toggle',
 			data: {
 				accountId: self.accountId,
 				agentId: agentId,
