@@ -1,16 +1,5 @@
 @import url('../../../css/vendor/jquery/jquery.dataTables.css');
 
-/* Top bar */
-#dashboard-content {
-	.preloader {
-		background: url('static/images/preloader.gif') no-repeat;
-		display: inline-block;
-		width: 30px;
-		height: 30px;
-		vertical-align: top;
-	}
-}
-
 .callcenter-dialog-body {
 	padding: 20px 20px 30px;
 
@@ -38,456 +27,456 @@
 	}
 }
 
-#dashboard-content #dashboard-topbar .settings-bar {
-    background: #B1AFAF;
-    cursor: pointer;
-    height: 20px;
-    line-height: 20px;
-    padding: 0 60px 3px;
-    width: auto;
-}
-
-#dashboard-content #dashboard-topbar .settings-bar label {
-    width: 300px;
-    text-align: left;
-    color: antiquewhite;
-}
-
-#dashboard-content #dashboard-topbar .settings-bar input[type=checkbox] {
-    margin-right: 10px;
-}
-
-#dashboard-content #dashboard-topbar .settings-bar .toggle-button {
-    text-decoration: underline;
-    cursor: pointer;
-    color: antiquewhite;
-}
-
-#dashboard-content #dashboard-topbar .settings-bar .toggle-button:hover {
-    font-weight: bold;
-}
-
-#dashboard-content #dashboard-topbar {
-    width: 100%;
-    background: white;
-}
-
-/* Top-Right queues */
-#dashboard-content #dashboard-topbar .topbar-right {
-    padding: 30px 10px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues {
-    margin: 0 20px;
-    height: auto;
-    border-radius: 5px;
-    background: white;
-    border: 1px solid #E1E1E1;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .slide {
-    background: #525252;
-    cursor: pointer;
-    height: 180px;
-    width: 32px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .slide:hover {
-    box-shadow: inset 1px 1px 4px 1px #353535;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .slide > .icon {
-    margin-top: 66px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .slide.left {
-    float: left;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .slide.right {
-    float: right;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner {
-    width: auto;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    height: auto;
-    margin: 0;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li {
-    width: 151px;
-    height: 200px;
-    list-style-type: none;
-    display: inline-block;
-    color: #555;
-    text-shadow: none;
-    cursor: pointer;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li.active .eavesdrop_queue,
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li.active .edit_queue {
-	display: inline-block !important;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li.active, #dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li:hover {
-    background: #E3E3E3;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li.active .box_title {
-    font-weight: bold;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li {
-    border-right: 1px solid #D0D0D0;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li:not(:first-child)  {
-    margin-left: -3px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box_title {
-    height: 40px;
-    color: #555;
-    line-height: 40px;
-    font-size: 17px;
-    text-align: center;
-    max-width: 145px;
-    overflow-x: hidden;
-    padding: 0 9px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box_title_text {
-	width: 100%;
-	display: inline-block;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	vertical-align: top;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li.active .box_title_text {
-	width: 78px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box_title .btn {
-	width: 19px;
-	padding: 2px 3px 3px 3px;
-	height: 18px;
-	text-align: center;
-	display: none;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box {
-    float: left;
-    width: 65px;
-    padding: 13px 5px 5px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box:nth-child(2n) {
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box > div {
-    height: 30px;
-    line-height: 30px;
-    font-size: 16px;
-    text-align: center;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .second_row .box > div {
-    height: auto;
-    padding-top: 5px;
-    line-height: 22px;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box .red {
-    color: #ff3322;
-}
-
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box .blue {
-    font-weight: bold;
-}
-
-/* Bottom-left List panel */
-#dashboard-content #callwaiting-list {
-    position:relative;
-    float: left;
-}
-
-#dashboard-content #callwaiting-list .add_flow {
-    line-height: 60px;
-    cursor: default;
-    color: #22A5FF;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-#dashboard-content #callwaiting-list .list-panel-anchor ul li {
-    cursor: default;
-}
-
-#dashboard-content #callwaiting-list .list-panel-anchor ul li a {
-    padding-left: 5px;
-    width: 110px;
-    float: left;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-#dashboard-content #callwaiting-list .list-panel-anchor ul li:hover, #dashboard-content #callwaiting-list .list-panel-anchor ul li.selected {
-    background: #333;
-}
-
-#dashboard-content #callwaiting-list .list-panel-anchor ul li .timer {
-    float: left;
-    width: 45px;
-    height: 27px;
-    line-height: 27px;
-    color: #22A5FF;
-}
-
-/* Bottom-right content */
-#dashboard-content .dashboard-bottom-right {
-    padding: 10px 10px 10px 220px;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view {
-    padding-left: 22px;
-    padding-top: 20px;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view.hide-logout .agent_wrapper.logged_out {
-    display: none !important;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper {
-    display: inline-block;
-    margin: 0 10px 20px;
-    padding: 0;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background: white;
-    vertical-align: top;
-    width: 240px;
-    position: relative;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .btn-login {
-	border-color: #22A5FF;
-	background: #22A5FF;
-	color: white;
-	text-shadow: none;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .btn-login i.icon-small {
-	color: white;
-	margin-right: 5px;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_header {
-    color: #555;
-    font-size: 15px;
-    display: inline-block;
-    margin: 0 10px 0;
-    padding: 0 5px 5px;
-    border-bottom: 1px solid #555;
-    background: white;
-    vertical-align: top;
-    box-sizing: content-box;
-    white-space: nowrap;
-    padding-top: 7px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 210px;
-}
-
-.agent_header_badge {
-    position: absolute;
-    border: 1px solid #555;
-    display: inline-block;
-    background: white;
-    color: #555;
-    border-radius: 0 5px 0 5px;
-    top: -8px;
-    right: -7px;
-    padding: 2px 8px;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_header .fa {
-    margin-right: 5px;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .agent_data {
-    padding: 20px 5px 15px;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .row_data {
-    padding: 5px 5px 0;
-    line-height: 27px;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .data_title {
-    width: 90px;
-    display: inline-block;
-    text-align: left;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .data_value {
-    width: 107px;
-    display: inline-block;
-    text-align: right;
-    font-size: 16px;
-    font-weight: bold;
-    color: #555;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .call {
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .call .data_title {
-    width: 157px;
-    font-weight: bold;
-    overflow: hidden;
-}
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper .call .icon {
-    cursor: pointer;
-    display: block;
-    float: right;
-}
-
-/* Color change based on agent's status */
-
-#dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper {
-    &.ready,
-    &.paused,
-    &.busy,
-    &.connecting,
-    &.wrapup,
-    &.handling {
-        border: 1px solid #22A5FF;
-        padding-left: 0;
-        padding-right: 0;
-
-        .agent_header {
-            color: white;
-            border-color: white;
-            background: #22A5FF;
-            padding-left: 12px;
-            padding-right: 12px;
-            margin: 0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .agent_header_badge {
-            border-width: 2px;
-            color: white;
-        }
-    }
-
-    &.ready {
-        .row_data.call_time .data_value {
-            color: #22A5FF;
-        }
-
-        .agent_header_badge {
-            border-color: white;
-            background-color: #22A5FF;
-        }
-    }
-
-
-    &.paused {
-        border-color: #ff7733;
-
-        .agent_header {
-            background: #ff7733;
-        }
-
-        .row_data.call_time .data_value{
-            color: #ff7733;
-        }
-
-
-        .agent_header_badge {
-            border-color: #ff7733;
-        }
-    }
-
-    &.busy {
-        border-color: #ffbb33;
-
-        .agent_header {
-            background: #ffbb33;
-        }
-
-        .row_data.call_time .data_value {
-            color: #ffbb33;
-        }
-
-        .agent_header_badge {
-            border-color: #ffbb33;
-        }
-    }
-
-    &.wrapup {
-        border-color: #ffbb33;
-
-        .agent_header {
-            background: #ffbb33;
-        }
-
-        .row_data.call_time .data_value {
-            color: #ffbb33;
-        }
-
-        .agent_header_badge {
-            border-color: #ffbb33;
-        }
-    }
-
-    &.handling {
-        border-color: #62c462;
-
-        .agent_header {
-            background: #62c462;
-        }
-
-        .row_data.call_time .data_value{
-            color: #62c462;
-        }
-
-        .agent_header_badge {
-            border-color: #62c462;
-        }
-    }
-
-    &.connecting {
-        border-color: #3366cc;
-
-        .agent_header{
-            background: #3366cc;
-        }
-
-        .row_data.call_time .data_value{
-            color: #3366cc;
-        }
-
-        .agent_header_badge {
-            border-color: #3366cc;
-        }
-    }
-}
-
-
-#dashboard-content .agent_text {
-    font-weight: bold;
-    color: #555;
+#dashboard-content {
+	.preloader {
+		background: url('static/images/preloader.gif') no-repeat;
+		display: inline-block;
+		width: 30px;
+		height: 30px;
+		vertical-align: top;
+	}
+
+	#dashboard-topbar {
+		width: 100%;
+		background: white;
+
+		.settings-bar {
+			background: #B1AFAF;
+			cursor: pointer;
+			height: 20px;
+			line-height: 20px;
+			padding: 0 60px 3px;
+			width: auto;
+
+			input[type=checkbox] {
+				margin-right: 10px;
+			}
+
+			.toggle-button {
+				text-decoration: underline;
+				cursor: pointer;
+				color: antiquewhite;
+
+				&:hover {
+					font-weight: bold;
+				}
+			}
+		}
+
+		.settings-bar label {
+			width: 300px;
+			text-align: left;
+			color: antiquewhite;
+		}
+
+		.topbar-right {
+			padding: 30px 10px;
+
+			.list_queues {
+				margin: 0 20px;
+				height: auto;
+				border-radius: 5px;
+				background: white;
+				border: 1px solid #E1E1E1;
+
+				.slide {
+					background: #525252;
+					cursor: pointer;
+					height: 180px;
+					width: 32px;
+					&:hover {
+						box-shadow: inset 1px 1px 4px 1px #353535;
+					}
+				}
+
+				.slide > .icon {
+					margin-top: 66px;
+				}
+
+				.slide.left {
+					float: left;
+				}
+
+				.slide.right {
+					float: right;
+				}
+
+				.list_queues_inner {
+					width: auto;
+					overflow-x: auto;
+					overflow-y: hidden;
+					white-space: nowrap;
+					height: auto;
+					margin: 0;
+				}
+
+				.list_queues_inner > li {
+					width: 151px;
+					height: 200px;
+					list-style-type: none;
+					display: inline-block;
+					color: #555;
+					text-shadow: none;
+					cursor: pointer;
+				}
+
+				.list_queues_inner > li.active .eavesdrop_queue,
+				.list_queues_inner > li.active .edit_queue {
+					display: inline-block !important;
+				}
+
+				.list_queues_inner > li.active,
+				.list_queues_inner > li:hover {
+					background: #E3E3E3;
+				}
+
+				.list_queues_inner > li.active .box_title {
+					font-weight: bold;
+				}
+
+				.list_queues_inner > li {
+					border-right: 1px solid #D0D0D0;
+				}
+
+				.list_queues_inner > li:not(:first-child)  {
+					margin-left: -3px;
+				}
+
+				.list_queues_inner > li .box_title {
+					height: 40px;
+					color: #555;
+					line-height: 40px;
+					font-size: 17px;
+					text-align: center;
+					max-width: 145px;
+					overflow-x: hidden;
+					padding: 0 9px;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.list_queues_inner > li .box_title_text {
+					width: 100%;
+					display: inline-block;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					vertical-align: top;
+				}
+
+				.list_queues_inner > li.active .box_title_text {
+					width: 78px;
+				}
+
+				.list_queues_inner > li .box_title .btn {
+					width: 19px;
+					padding: 2px 3px 3px 3px;
+					height: 18px;
+					text-align: center;
+					display: none;
+				}
+
+				.list_queues_inner > li .box {
+					float: left;
+					width: 65px;
+					padding: 13px 5px 5px;
+				}
+
+				.list_queues_inner > li .box > div {
+					height: 30px;
+					line-height: 30px;
+					font-size: 16px;
+					text-align: center;
+				}
+
+				.list_queues_inner > li .second_row .box > div {
+					height: auto;
+					padding-top: 5px;
+					line-height: 22px;
+				}
+
+				.list_queues_inner > li .box .red {
+					color: #ff3322;
+				}
+
+				.list_queues_inner > li .box .blue {
+					font-weight: bold;
+				}
+			}
+		}
+	}
+
+	#callwaiting-list {
+		position:relative;
+		float: left;
+
+		.add_flow {
+			line-height: 60px;
+			cursor: default;
+			color: #22A5FF;
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		.list-panel-anchor ul li {
+			cursor: default;
+		}
+
+		.list-panel-anchor ul li a {
+			padding-left: 5px;
+			width: 110px;
+			float: left;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		.list-panel-anchor ul li:hover,
+		.list-panel-anchor ul li.selected {
+			background: #333;
+		}
+
+		.list-panel-anchor ul li .timer {
+			float: left;
+			width: 45px;
+			height: 27px;
+			line-height: 27px;
+			color: #22A5FF;
+		}
+	}
+
+	.dashboard-bottom-right {
+		padding: 10px 10px 10px 220px;
+
+		#agents-view {
+			padding-left: 22px;
+			padding-top: 20px;
+
+			&.hide-logout .agent_wrapper.logged_out {
+				display: none !important;
+			}
+
+			.agent_wrapper {
+				display: inline-block;
+				margin: 0 10px 20px;
+				padding: 0;
+				border-radius: 5px;
+				border: 1px solid #555;
+				background: white;
+				vertical-align: top;
+				width: 240px;
+				position: relative;
+
+				.btn-login {
+					border-color: #22A5FF;
+					background: #22A5FF;
+					color: white;
+					text-shadow: none;
+				}
+
+				.btn-login i.icon-small {
+					color: white;
+					margin-right: 5px;
+				}
+
+				.agent_header {
+					color: #555;
+					font-size: 15px;
+					display: inline-block;
+					margin: 0 10px 0;
+					padding: 0 5px 5px;
+					border-bottom: 1px solid #555;
+					background: white;
+					vertical-align: top;
+					box-sizing: content-box;
+					white-space: nowrap;
+					padding-top: 7px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					width: 210px;
+
+					.fa {
+						margin-right: 5px;
+					}
+				}
+
+				.agent_header_badge {
+					position: absolute;
+					border: 1px solid #555;
+					display: inline-block;
+					background: white;
+					color: #555;
+					border-radius: 0 5px 0 5px;
+					top: -8px;
+					right: -7px;
+					padding: 2px 8px;
+				}
+
+				.agent_data {
+					padding: 20px 5px 15px;
+				}
+
+				.row_data {
+					padding: 5px 5px 0;
+					line-height: 27px;
+				}
+
+				.data_title {
+					width: 90px;
+					display: inline-block;
+					text-align: left;
+				}
+
+				.data_value {
+					width: 107px;
+					display: inline-block;
+					text-align: right;
+					font-size: 16px;
+					font-weight: bold;
+					color: #555;
+				}
+
+				.call {
+					.data_title {
+						width: 157px;
+						font-weight: bold;
+						overflow: hidden;
+					}
+
+					.icon {
+						cursor: pointer;
+						display: block;
+						float: right;
+					}
+				}
+
+				&.ready,
+				&.paused,
+				&.busy,
+				&.connecting,
+				&.wrapup,
+				&.handling {
+					border: 1px solid #22A5FF;
+					padding-left: 0;
+					padding-right: 0;
+
+					.agent_header {
+						color: white;
+						border-color: white;
+						background: #22A5FF;
+						padding-left: 12px;
+						padding-right: 12px;
+						margin: 0;
+						width: 100%;
+						box-sizing: border-box;
+					}
+
+					.agent_header_badge {
+						border-width: 2px;
+						color: white;
+					}
+				}
+
+				&.ready {
+					.row_data.call_time .data_value {
+						color: #22A5FF;
+					}
+
+					.agent_header_badge {
+						border-color: white;
+						background-color: #22A5FF;
+					}
+				}
+
+
+				&.paused {
+					border-color: #ff7733;
+
+					.agent_header {
+						background: #ff7733;
+					}
+
+					.row_data.call_time .data_value{
+						color: #ff7733;
+					}
+
+
+					.agent_header_badge {
+						border-color: #ff7733;
+					}
+				}
+
+				&.busy {
+					border-color: #ffbb33;
+
+					.agent_header {
+						background: #ffbb33;
+					}
+
+					.row_data.call_time .data_value {
+						color: #ffbb33;
+					}
+
+					.agent_header_badge {
+						border-color: #ffbb33;
+					}
+				}
+
+				&.wrapup {
+					border-color: #ffbb33;
+
+					.agent_header {
+						background: #ffbb33;
+					}
+
+					.row_data.call_time .data_value {
+						color: #ffbb33;
+					}
+
+					.agent_header_badge {
+						border-color: #ffbb33;
+					}
+				}
+
+				&.handling {
+					border-color: #62c462;
+
+					.agent_header {
+						background: #62c462;
+					}
+
+					.row_data.call_time .data_value{
+						color: #62c462;
+					}
+
+					.agent_header_badge {
+						border-color: #62c462;
+					}
+				}
+
+				&.connecting {
+					border-color: #3366cc;
+
+					.agent_header{
+						background: #3366cc;
+					}
+
+					.row_data.call_time .data_value{
+						color: #3366cc;
+					}
+
+					.agent_header_badge {
+						border-color: #3366cc;
+					}
+				}
+
+			}
+		}
+	}
+
+	.agent_text {
+		font-weight: bold;
+		color: #555;
+	}
 }
 
 .timer {
