@@ -1,0 +1,18 @@
+<div class="callcenter-dialog-body eavesdrop-dialog-body">
+	<form name="form" class="form-horizontal" method="post" action="#">
+		<div class="control-group">
+			<label class="control-label" for="object-selector">{{i18n.callcenter.eavesdropPopup.deviceLabel}}</label>
+			<div class="controls">
+				<select id="object-selector">
+					{{#each devices}}
+						<option value="{{id}}">{{name}}</option>
+					{{/each}}
+				</select>
+			</div>
+		</div>
+		<div class="buttons-wrapper">
+			<button id="ring" class="btn btn-primary">{{ i18n.callcenter.eavesdropPopup.callBtnText }}</button>
+			<button id="cancel" class="btn">{{ i18n.callcenter.eavesdropPopup.cancelBtnText }}</button>
+		</div>
+	</form>
+</div>

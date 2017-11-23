@@ -1,7 +1,7 @@
 <div>
 	<div id="agents-view" {{#if hide_logout}}class="hide-logout"{{/if}}>
 		{{#each agents}}
-			<div class="agent_wrapper {{status}}" id="{{id}}" data-queues="{{queues}}">
+			<div class="js-agent-item agent_wrapper {{status}}" id="{{id}}" data-queues="{{queues}}">
 				<div class="agent_header">
 					<span class="fa fa-user"/>
 					{{first_name}} {{last_name}}
@@ -42,7 +42,9 @@
 						{{#compare status "===" 'handling'}}
 							{{#if current_call}}
 								<div class="data_title agent_text">{{ ../../i18n.callcenter.current_call }}</div>
-								<span data-call_id="{{current_call.call_id}}" class="icon tech_support eavesdrop"/>
+								<a title="{{ ../i18n.callcenter.eavesdropTooltip }}" class="btn js-eavesdrop eavesdrop-call" data-call_id="{{current_call.call_id}}" href="">
+									<i class="fa fa-headphones"></i>
+								</a>
 							{{else}}
 								<div class="data_title agent_text">{{ ../../i18n.callcenter.no_active_call }}</div>
 							{{/if}}

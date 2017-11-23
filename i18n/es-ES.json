@@ -14,11 +14,18 @@
 		"which_device": "Which device?",
 		"ring": "Ring",
 		"cancel": "Cancel",
+		"call_waiting": "Call Waiting",
 		"call_waiting_log": "Call Waiting Log...",
 		"eavesdrop_request_failed": "Eavesdrop Request failed. Error #",
 		"devices_title": "Devices",
 		"hide_queues_html": "Hide Queues",
 		"show_queues_html": "Show Queues",
+		"eavesdropTooltip": "Eavesdrop",
+		"eavesdropPopup": {
+			"deviceLabel": "Device",
+			"callBtnText": "Call",
+			"cancelBtnText": "Cancel"
+		},
 		"settings": {
 			"sidebar": {
 				"title": "Queues"

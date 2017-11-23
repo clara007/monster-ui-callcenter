@@ -39,6 +39,14 @@ var app = {
 			url: 'accounts/{accountId}/agents/{agentId}/status',
 			verb: 'POST'
 		}*/
+		'callcenter.queue.eavesdrop': {
+			'verb': 'PUT',
+			'url': 'accounts/{accountId}/queues/{queueId}/eavesdrop'
+		},
+		'callcenter.call.eavesdrop': {
+			'verb': 'PUT',
+			'url': 'accounts/{accountId}/queues/eavesdrop'
+		}
 	},
 
 	load: function(callback){
@@ -143,6 +151,66 @@ var app = {
 			}
 		});
 	},
+
+	showEavesdropPopup: function(mode, data) {
+		var self = this;
+
+		self.callApi({
+			resource: 'device.list',
+			data: {
+				accountId: self.accountId,
+				generateError: false
+			},
+			success: function (devices) {
+				var popup_html = $(monster.template(self, 'eavesdrop_popup', {
+					devices: devices.data
+				}));
+
+				var i18n = self.i18n.active();
+
+				$('#ring', popup_html).click(function(e) {
+					e.preventDefault();
+
+					var requestData = {
+						accountId: self.accountId,
+						generateError: false,
+						data: {
+							id: $('#object-selector', popup_html).val()
+						}
+					};
+
+					if(mode === 'call') {
+						requestData.data.call_id = data.call_id;
+					} else if(mode === 'queue') {
+						requestData.queueId = data.queue_id;
+					}
+
+					monster.request({
+						resource: 'callcenter.' + mode + '.eavesdrop',
+						data: requestData,
+						success: function (devices) {
+							popup.dialog('close');
+						},
+						error: function() {
+							// monster.ui.alert('Eavesdrop failed');
+							console.log(i18n.callcenter.eavesdrop_request_failed);
+						}
+					});
+				});
+
+				$('#cancel', popup_html).click(function(e) {
+					e.preventDefault();
+					popup.dialog('close');
+				});
+
+				var popup = monster.ui.dialog(popup_html, {
+					title: i18n.callcenter.select_the_device,
+					width: '450px'
+				});
+			}
+		});
+	},
+
 /*	listDevices: function (callback) {
 		var self = this;
 
@@ -1443,6 +1511,29 @@ var app = {
 			} else {
 				self.detail_stat(self.vars.queue_id, container);
 			}
+		});
+
+		$('.js-agent-item .js-eavesdrop', container).on('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			var data = {
+				call_id: $(this).data('call_id')
+			};
+
+			self.showEavesdropPopup('call', data);
+		});
+
+
+		$('.list_queues li .js-eavesdrop', container).on('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			var data = {
+				queue_id: $(this).closest('li').attr('id')
+			};
+
+			self.showEavesdropPopup('queue', data);
 		});
 
 		$('.js-login-to-queue', container).click(function(e) {

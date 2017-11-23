@@ -11,6 +11,33 @@
 	}
 }
 
+.callcenter-dialog-body {
+	padding: 20px 20px 30px;
+
+	form {
+		margin-bottom: 0;
+	}
+
+	.buttons-wrapper {
+		padding-top: 10px;
+		text-align: center;
+	}
+
+	.buttons-wrapper .btn {
+		margin-right: 10px;
+	}
+}
+
+.eavesdrop-dialog-body {
+	.form-horizontal .control-label {
+		width: 100px;
+	}
+
+	.form-horizontal .controls {
+		margin-left: 115px;
+	}
+}
+
 #dashboard-content #dashboard-topbar .settings-bar {
     background: #B1AFAF;
     cursor: pointer;
@@ -90,7 +117,7 @@
     margin: 0;
 }
 
-#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li{
+#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li {
     width: 151px;
     height: 200px;
     list-style-type: none;
@@ -98,6 +125,11 @@
     color: #555;
     text-shadow: none;
     cursor: pointer;
+}
+
+#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li.active .eavesdrop_queue,
+#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li.active .edit_queue {
+	display: inline-block !important;
 }
 
 #dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li.active, #dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li:hover {
@@ -127,6 +159,27 @@
     padding: 0 9px;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box_title_text {
+	width: 100%;
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: top;
+}
+
+#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li.active .box_title_text {
+	width: 78px;
+}
+
+#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box_title .btn {
+	width: 19px;
+	padding: 2px 3px 3px 3px;
+	height: 18px;
+	text-align: center;
+	display: none;
 }
 
 #dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box {

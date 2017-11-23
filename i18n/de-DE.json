@@ -20,6 +20,12 @@
 		"devices_title": "Geräte",
 		"hide_queues_html": "Warteräume ausblenden",
 		"show_queues_html": "Warteräume anzeigen",
+		"eavesdropTooltip": "Eavesdrop",
+		"eavesdropPopup": {
+			"deviceLabel": "Device",
+			"callBtnText": "klingeln",
+			"cancelBtnText": "Abbrechen"
+		},
 		"settings": {
 			"sidebar": {
 				"title": "Queues"

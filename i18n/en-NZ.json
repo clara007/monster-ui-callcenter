@@ -21,6 +21,12 @@
 		"devices_title": "Devices",
 		"hide_queues_html": "Hide Queues",
 		"show_queues_html": "Show Queues",
+		"eavesdropTooltip": "Eavesdrop",
+		"eavesdropPopup": {
+			"deviceLabel": "Device",
+			"callBtnText": "Call",
+			"cancelBtnText": "Cancel"
+		},
 		"settings": {
 			"sidebar": {
 				"title": "Queues"
@@ -33,7 +39,6 @@
 				"noDataText": "None",
 				"actionsColumnHeader": "Add",
 				"userNameColumnHeader": "User Name"
-
 			},
 			"queuePanel": {
 				"title": "Queue settings",

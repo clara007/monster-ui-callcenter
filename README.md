@@ -16,15 +16,13 @@ Installation
 2. Add next strings to `js/lib/jquery.kazoosdk.js` after string `methodsGenerator = {`
 ```javascript
     queues: {
-        'queue_eavesdrop': { 'verb': 'PUT', 'url': 'accounts/{accountId}/queues/{queueId}/eavesdrop' },
-        'call_eavesdrop':  { 'verb': 'PUT', 'url': 'accounts/{accountId}/queues/eavesdrop' },
         'queues_list':     { 'verb': 'GET', 'url': 'accounts/{accountId}/queues' },
         'queues_create':   { 'verb': 'PUT', 'url': 'accounts/{accountId}/queues' },
         'queues_get':      { 'verb': 'GET', 'url': 'accounts/{accountId}/queues/{queuesId}' },
         'queues_update':   { 'verb': 'POST', 'url': 'accounts/{accountId}/queues/{queuesId}' },
         'queues_delete':   { 'verb': 'DELETE', 'url': 'accounts/{accountId}/queues/{queuesId}' },
         'queues_stats':    { 'verb': 'GET', 'url': 'accounts/{accountId}/queues/stats' }
-        },
+    },
     agents: {
         'agents_stats':    { 'verb': 'GET', 'url': 'accounts/{accountId}/agents/stats' },
         'agents_status':   { 'verb': 'GET', 'url': 'accounts/{accountId}/agents/status' },

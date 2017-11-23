@@ -19,6 +19,12 @@
 		"devices_title": "设备",
 		"hide_queues_html": "隐藏队列",
 		"show_queues_html": "显示队列",
+		"eavesdropTooltip": "Eavesdrop",
+		"eavesdropPopup": {
+			"deviceLabel": "Device",
+			"callBtnText": "Call",
+			"cancelBtnText": "Cancel"
+		},
 		"settings": {
 			"sidebar": {
 				"title": "Queues"
