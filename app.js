@@ -816,7 +816,10 @@ var app = {
 
 		$container.find('.js-open-cc-settings').on('click', function(e) {
 			e.preventDefault();
-			self.settingsRender($container);
+			self.settingsRender($container, function(){
+				// Open first queue
+				$('#queues-list li:first-child a').click();
+			});
 		});
 	},
 
@@ -862,13 +865,8 @@ var app = {
 		var self = this;
 		var html = $(monster.template(self, 'settings', {}));
 		$container.empty().append(html);
-		self.settingsInit($container, callback);
-		self.initHeaderSubmenu();
-	},
-
-	settingsInit: function($container, callback) {
-		var self = this;
 		var $queuesListBox = $container.find('#queues-list-container');
+
 		self.settingsQueuesListRender(null, $queuesListBox, function() {
 			monster.ui.tooltips($container, {
 				options: {
@@ -879,13 +877,12 @@ var app = {
 
 			self.settingsBindEvents($container);
 
-			$('#queues-list li:first-child a').click();
-
 			if(typeof(callback) === 'function') {
 				callback();
 			}
 		});
 
+		self.initHeaderSubmenu();
 	},
 
 	settingsBindEvents: function($container) {
@@ -1530,7 +1527,7 @@ var app = {
 		var self = this;
 
 		// list of queues
-		$('.list_queues_inner > li', container).on('click', function(e) {
+		$('.js-queues-list > li', container).on('click', function(e) {
 			var $queueEl = $(this);
 
 			self.vars.queue_id = $queueEl.attr('id');
@@ -1560,8 +1557,18 @@ var app = {
 			self.showEavesdropPopup('call', data);
 		});
 
+		$('.js-queues-list .js-edit-queue', container).on('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
 
-		$('.list_queues li .js-eavesdrop', container).on('click', function(e) {
+			var queueId = $(this).closest('li').attr('id');
+			self.settingsRender($('#monster_content'), function(){
+				$('#queues-list li').filter('[data-id="' + queueId + '"]').addClass('active');
+				self.settingsQueueEditFormRender(queueId, function(){})
+			});
+		});
+
+		$('.js-queues-list li .js-eavesdrop', container).on('click', function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 
