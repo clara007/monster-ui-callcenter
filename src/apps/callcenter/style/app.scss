@@ -327,11 +327,11 @@
 				}
 
 				.data_value {
-					width: 107px;
+					width: 125px;
 					display: inline-block;
 					text-align: right;
 					font-size: 16px;
-					font-weight: bold;
+					font-weight: normal;
 					color: #555;
 				}
 
@@ -372,18 +372,17 @@
 
 					.agent_header_badge {
 						border-width: 2px;
-						color: white;
+						border-color: white;
+						color: #555;
 					}
 				}
 
 				&.ready {
-					.row_data.call_time .data_value {
-						color: #22A5FF;
-					}
 
 					.agent_header_badge {
 						border-color: white;
 						background-color: #22A5FF;
+						color: white;
 					}
 				}
 
@@ -395,29 +394,28 @@
 						background: #ff7733;
 					}
 
-					.row_data.call_time .data_value{
-						color: #ff7733;
-					}
-
-
 					.agent_header_badge {
-						border-color: #ff7733;
+						border-color: white;
+						background: #ff7733;
+						color: white;
 					}
 				}
 
 				&.busy {
-					border-color: #ffbb33;
+					border-color: #ffac1b;
 
 					.agent_header {
-						background: #ffbb33;
+						background: #ffac1b;
 					}
 
 					.row_data.call_time .data_value {
-						color: #ffbb33;
+						color: #555;
 					}
 
 					.agent_header_badge {
-						border-color: #ffbb33;
+						border-color: white;
+						background: #ffac1b;
+						color: white;
 					}
 				}
 
@@ -428,12 +426,10 @@
 						background: #ffbb33;
 					}
 
-					.row_data.call_time .data_value {
-						color: #ffbb33;
-					}
-
 					.agent_header_badge {
-						border-color: #ffbb33;
+						border-color: white;
+						background-color: #ffbb33;
+						color: white;
 					}
 				}
 
@@ -444,12 +440,10 @@
 						background: #62c462;
 					}
 
-					.row_data.call_time .data_value{
-						color: #62c462;
-					}
-
 					.agent_header_badge {
-						border-color: #62c462;
+						border-color: white;
+						background-color: #62c462;
+						color: white;
 					}
 				}
 
@@ -460,12 +454,10 @@
 						background: #3366cc;
 					}
 
-					.row_data.call_time .data_value{
-						color: #3366cc;
-					}
-
 					.agent_header_badge {
-						border-color: #3366cc;
+						border-color: white;
+						background-color: #3366cc;
+						color: white;
 					}
 				}
 
