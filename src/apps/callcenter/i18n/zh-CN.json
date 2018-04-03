@@ -82,6 +82,7 @@
 			"mediaSilence": "Silence"
 		},
 		"headerMenu": {
+			"mainBtnText": "Menu",
 			"dashboard": "Dashboard",
 			"manageQueues": "Manage Queues"
 		}

@@ -161,15 +161,22 @@ var app = {
 	},
 
 	initHeaderSubmenu: function() {
+		var self = this;
 		var $headerMenu = $('#cc-header-menu');
-		$headerMenu.on('mouseenter', function(){
-			$(this).find('.js-header-menu-items').show();
-			$(this).find('.js-header-menu-title').hide();
-		}).on('mouseleave', function(){
-			$(this).find('.js-header-menu-items').hide();
-			$(this).find('.js-header-menu-title').show();
-		}).on('click', function(e){
+
+		$headerMenu.find('.js-header-menu-title').on('click', function(e) {
 			e.preventDefault();
+			$(this).hide();
+			$headerMenu.find('.js-header-menu-items').show();
+
+			if(self.vars.hasOwnProperty('headerMenuTimeoutId')) {
+				window.clearTimeout(self.vars.headerMenuTimeoutId);
+			}
+
+			self.vars.headerMenuTimeoutId = window.setTimeout(function(){
+				$headerMenu.find('.js-header-menu-items').hide();
+				$headerMenu.find('.js-header-menu-title').show();
+			}, 5000);
 		});
 	},
 
@@ -332,7 +339,8 @@ var app = {
 			map_agents[v.id] = 'logged_out';
 		});
 
-		self.global_timer = setInterval(huge_poll, polling_interval * 1000);
+		// TODO: uncomment next
+		//self.global_timer = setInterval(huge_poll, polling_interval * 1000);
 	},
 
 	get_queues_stats: function (callback) {
