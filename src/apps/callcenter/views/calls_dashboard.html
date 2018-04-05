@@ -1,14 +1,19 @@
-<div>
-    {{#each waits}}
-        <li title="{{status}}" class="call-waiting list-element" style="display: block;" data-call_id="{{call_id}}" data-queue_id="{{queue_id}}">
-            <a href="#" data-module="activate" data-action="media">{{friendly_title}}</a>
-            <span class="timer">{{friendly_duration}}</span>
-        </li>
-    {{/each}}
-    {{#each progress}}
-        <li title="{{status}}" class="call-waiting list-element" style="display: block;" data-call_id="{{call_id}}" data-queue_id="{{queue_id}}">
-            <a href="#" data-module="activate" data-action="media">{{friendly_title}}</a>
-            <span class="timer">{{friendly_duration}}</span>
-        </li>
-    {{/each}}
-</div>
+<ul>
+	{{#each waits}}
+	<li title="{{status}}" class="call-waiting-item" data-call_id="{{call_id}}" data-queue_id="{{queue_id}}">
+		<a href="#" data-module="activate" data-action="media">
+			<span class="cw-item-name">{{friendly_title}}</span>
+			<span class="cw-item-timer">{{friendly_duration}}</span>
+		</a>
+	</li>
+	{{/each}}
+
+	{{#each progress}}
+	<li title="{{status}}" class="call-waiting-item" data-call_id="{{call_id}}" data-queue_id="{{queue_id}}">
+		<a href="#" data-module="activate" data-action="media">
+			<span class="cw-item-name">{{friendly_title}}</span>
+			<span class="cw-item-timer">{{friendly_duration}}</span>
+		</a>
+	</li>
+	{{/each}}
+</ul>

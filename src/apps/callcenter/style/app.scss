@@ -206,46 +206,78 @@
 		}
 	}
 
-	#callwaiting-list {
-		position:relative;
+	.call-waiting-list {
 		float: left;
+		width: 220px;
+		padding: 0 0 0 30px;
+		background-color: #fff;
+		/*-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		border-radius: 6px;
+		-webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+		-moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);*/
 
-		.add_flow {
-			line-height: 60px;
-			cursor: default;
-			color: #22A5FF;
-			font-size: 14px;
-			font-weight: bold;
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
 		}
 
-		.list-panel-anchor ul li {
-			cursor: default;
+		li > a {
+			display: block;
+			margin: 0 0 -1px;
+			padding: 8px 14px;
+			border: 1px solid #e5e5e5;
+			color: #414141;
 		}
 
-		.list-panel-anchor ul li a {
-			padding-left: 5px;
-			width: 110px;
-			float: left;
-			overflow: hidden;
-			white-space: nowrap;
+		li:first-child > a {
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
 		}
 
-		.list-panel-anchor ul li:hover,
-		.list-panel-anchor ul li.selected {
-			background: #333;
+		li:last-child > a {
+			border-bottom-left-radius: 6px;
+			border-bottom-right-radius: 6px;
 		}
 
-		.list-panel-anchor ul li .timer {
-			float: left;
-			width: 45px;
-			height: 27px;
-			line-height: 27px;
-			color: #22A5FF;
+		.active > a {
+			position: relative;
+			z-index: 2;
+			padding: 9px 15px;
+			border: 0;
+			text-shadow: 0 1px 0 rgba(0,0,0,.15);
+			-webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+			-moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+			box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+		}
+
+		.icon-right {
+			float: right;
+			margin-top: 2px;
+			margin-right: -6px;
+			opacity: .25;
+		}
+
+		.call-waiting-item {
+			.cw-item-name {
+				display: inline-block;
+				width: 140px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				vertical-align: top;
+			}
+
+			.cw-item-timer {
+				display: inline-block;
+				vertical-align: top;
+			}
 		}
 	}
 
 	.dashboard-bottom-right {
-		padding: 10px 10px 10px 220px;
+		padding: 10px 10px 10px 229px;
 
 		#agents-view {
 			padding-left: 22px;
@@ -469,10 +501,6 @@
 		font-weight: bold;
 		color: #555;
 	}
-}
-
-.timer {
-    float: right;
 }
 
 .list-panel-anchor ul li{
