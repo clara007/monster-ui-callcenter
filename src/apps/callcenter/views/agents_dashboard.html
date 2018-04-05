@@ -10,65 +10,65 @@
 				<div class="agent_data">
 					<div class="row_data call_time">
 						{{#compare status "===" "paused"}}
-							<div class="data_title agent_text">{{ ../i18n.callcenter.break_time }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.break_time }}</div>
 							<div class="data_value">{{call_time}}</div>
 						{{/compare}}
 						{{#compare status "===" 'wrapup'}}
-							<div class="data_title agent_text">{{ ../i18n.callcenter.wrapping_up }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.wrapping_up }}</div>
 							<div class="data_value">{{call_time}}</div>
 						{{/compare}}
 						{{#compare status "===" 'handling'}}
-							<div class="data_title agent_text">{{ ../i18n.callcenter.call_time }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.call_time }}</div>
 							<div class="data_value">{{call_time}}</div>
 						{{/compare}}
 						{{#compare status "===" 'busy'}}
-							<div class="data_title agent_text">{{ ../i18n.callcenter.busy_since }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.busy_since }}</div>
 							<div class="data_value">{{call_time}}</div>
 						{{/compare}}
 						{{#compare status "===" 'ready'}}
-							<div class="data_title agent_text">{{ ../i18n.callcenter.call_time }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.call_time }}</div>
 							<div class="data_value">-</div>
 						{{/compare}}
 						{{#compare status "===" 'logged_out'}}
-							<div class="data_title agent_text">{{ ../i18n.callcenter.call_time }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.call_time }}</div>
 							<div class="data_value">-</div>
 						{{/compare}}
 						{{#compare status "===" 'logged_in'}}
-							<div class="data_title agent_text">{{ ../i18n.callcenter.call_time }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.call_time }}</div>
 							<div class="data_value">-</div>
 						{{/compare}}
 					</div>
 					<div class="row_data call">
 						{{#compare status "===" 'handling'}}
 							{{#if current_call}}
-								<div class="data_title agent_text">{{ ../../i18n.callcenter.current_call }}</div>
+								<div class="data_title agent_text">{{ @root.i18n.callcenter.current_call }}</div>
 								<a title="{{ ../i18n.callcenter.eavesdropTooltip }}" class="btn js-eavesdrop eavesdrop-call" data-call_id="{{current_call.call_id}}" href="">
 									<i class="fa fa-headphones"></i>
 								</a>
 							{{else}}
-								<div class="data_title agent_text">{{ ../../i18n.callcenter.no_active_call }}</div>
+								<div class="data_title agent_text">{{ @root.i18n.callcenter.no_active_call }}</div>
 							{{/if}}
 						{{/compare}}
 						{{#compare status "===" 'connecting'}}
 							{{#if current_call}}
-								<div class="data_title agent_text">{{ ../../i18n.callcenter.current_call }}</div>
+								<div class="data_title agent_text">{{ @root.i18n.callcenter.current_call }}</div>
 							{{else}}
-								<div class="data_title agent_text">{{ ../../i18n.callcenter.no_active_call }}</div>
+								<div class="data_title agent_text">{{ @root.i18n.callcenter.no_active_call }}</div>
 							{{/if}}
 						{{/compare}}
 						{{#compare status "!==" 'connecting' }}
 							{{#compare status "!==" 'handling'}}
-							<div class="data_title agent_text">{{ ../../i18n.callcenter.no_active_call }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.no_active_call }}</div>
 							{{/compare}}
 						{{/compare}}
 					</div>
 					<div class="all_data">
 						<div class="row_data call_hours">
-							<div class="data_title agent_text">{{ ../i18n.callcenter.total_calls }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.total_calls }}</div>
 							<div class="data_value">{{total_calls}}</div>
 						</div>
 						<div class="row_data call_day">
-							<div class="data_title agent_text">{{ ../i18n.callcenter.missed_calls }}</div>
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.missed_calls }}</div>
 							<div class="data_value">{{missed_calls}}</div>
 						</div>
 					</div>
@@ -76,11 +76,11 @@
 						{{#each queues_list}}
 							<div class="queue_stat" data-id="{{id}}">
 								<div class="row_data call_hours">
-									<div class="data_title agent_text">{{ ../i18n.callcenter.total_calls }}</div>
+									<div class="data_title agent_text">{{ @root.i18n.callcenter.total_calls }}</div>
 									<div class="data_value">{{total_calls}}</div>
 								</div>
 								<div class="row_data call_day">
-									<div class="data_title agent_text">{{ ../i18n.callcenter.missed_calls }}</div>
+									<div class="data_title agent_text">{{ @root.i18n.callcenter.missed_calls }}</div>
 									<div class="data_value">{{missed_calls}}</div>
 								</div>
 							</div>
