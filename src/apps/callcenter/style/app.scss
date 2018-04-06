@@ -223,7 +223,7 @@
 			padding: 0;
 		}
 
-		li > a {
+		li > span {
 			display: block;
 			margin: 0 0 -1px;
 			padding: 8px 14px;
@@ -231,32 +231,14 @@
 			color: #414141;
 		}
 
-		li:first-child > a {
+		li:first-child > span {
 			border-top-left-radius: 6px;
 			border-top-right-radius: 6px;
 		}
 
-		li:last-child > a {
+		li:last-child > span {
 			border-bottom-left-radius: 6px;
 			border-bottom-right-radius: 6px;
-		}
-
-		.active > a {
-			position: relative;
-			z-index: 2;
-			padding: 9px 15px;
-			border: 0;
-			text-shadow: 0 1px 0 rgba(0,0,0,.15);
-			-webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-			-moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-			box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-		}
-
-		.icon-right {
-			float: right;
-			margin-top: 2px;
-			margin-right: -6px;
-			opacity: .25;
 		}
 
 		.call-waiting-item {

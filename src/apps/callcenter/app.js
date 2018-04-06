@@ -339,8 +339,7 @@ var app = {
 			map_agents[v.id] = 'logged_out';
 		});
 
-		// TODO: uncomment next
-		//self.global_timer = setInterval(huge_poll, polling_interval * 1000);
+		self.global_timer = setInterval(huge_poll, polling_interval * 1000);
 	},
 
 	get_queues_stats: function (callback) {
@@ -435,18 +434,6 @@ var app = {
 			}
 		});
 	},
-
-	/*render_callwaiting_list: function (_container) {
-		var self = this,
-			container = _container || $('#dashboard-content');
-
-		$('#callwaiting-list', container).empty().listpanel({
-			label: 'Call Waiting',
-			identifier: 'callwaiting-listview',
-			data: []
-		});
-		$('.add_flow', container).empty().html('call_waiting_log');
-	},*/
 
 	get_time_seconds: function (seconds) {
 		seconds = Math.floor(seconds);
@@ -706,7 +693,6 @@ var app = {
 		$container.find('.topbar-right .list_queues_inner').animate({ scrollLeft: scroll_value }, 0);
 		$container.find('#callwaiting-list').append(calls_html);
 
-		// self.render_callwaiting_list(dashboard_html);
 		$container.empty().append(html);
 		self.bind_live_events($container);
 		self.render_timers(data);
@@ -788,9 +774,9 @@ var app = {
 			timer_type = _timer_type || 'increment';
 
 		if(type === 'in_progress' || type === 'agent_status') {
-			$target = $('.agent_wrapper#'+id+' .call_time .data_value');
+			$target = $('.js-agent-item#'+id+' .js-call-time .js-time-value');
 		} else if(type === 'waiting') {
-			$target = $('.call-waiting[data-call_id="'+id+'"] .timer');
+			$target = $('.js-cw-item[data-call_id="'+id+'"] .js-timer');
 		}
 
 		if(!self.map_timers[type]) {
@@ -935,32 +921,6 @@ var app = {
 		};
 
 		queueData = $.extend(true, defaultQueueData, queueData || {});
-/*		var data = {
-			"data": {
-				"name": "test2",
-				"record_caller": true,
-				"moh": "1880ca1c34f3ed88b4071cda175f525e",
-				"strategy": "round_robin",
-				"call_recording_url": "",
-				"agent_wrapup_time": "30",
-				"max_queue_size": "0",
-				"connection_timeout": "0",
-				"enter_when_empty": false,
-				"notifications": {
-					"hangup": "",
-					"pickup": "",
-					"method": "GET"
-				},
-
-
-				"member_timeout": "5",
-				"ui_metadata": {
-					"ui": "kazoo-ui",
-					"version": "3.22-0https://github.com/2600hz/kazoo-ui.gittags/3.22.096a18351d378f041d957acd3c1c94c8e6de462ef2015-10-22_01-32-14120"
-				}
-			},
-			"verb": "PUT"
-		};*/
 
 		monster.parallel({
 				users: function(callback) {
@@ -1310,27 +1270,6 @@ var app = {
 	settingsQueueSave: function(queueId, queueData, callback) {
 		var self = this;
 
-		/*var data = {
-			"data": {
-				"connection_timeout": "0",
-				"member_timeout": "5",
-				"agent_wrapup_time": "30",
-				"record_caller": true,
-				"moh": "1880ca1c34f3ed88b4071cda175f525e",
-				"notifications": {"hangup": "", "pickup": "", "method": "GET"},
-				"max_queue_size": "0",
-				"name": "test2",
-				"strategy": "round_robin",
-				"call_recording_url": "",
-				"enter_when_empty": false,
-				"ui_metadata": {
-					"ui": "kazoo-ui",
-					"version": "3.22-0https://github.com/2600hz/kazoo-ui.gittags/3.22.096a18351d378f041d957acd3c1c94c8e6de462ef2015-10-22_01-32-14120"
-				}
-			},
-			"verb": "PUT"
-		};*/
-
 		if(queueId) {
 			// Edit exist queue
 			monster.request({
@@ -1643,9 +1582,6 @@ var app = {
 	},
 
 	detail_stat: function(queue_id, container) {
-		console.log('Detail stat');
-		console.log('Queue id:');
-		console.log(queue_id);
 		var self = this,
 			$self_queue = $('#' + queue_id, container);
 
@@ -1696,29 +1632,7 @@ var app = {
 		});
 
 		self.map_timers = {};
-	},
-
-	activate_queue_stat: function(args) {
-		//TODO check render global data
-		var self = this,
-		container = args.container || $('#monster-content');
-		container.empty();
-		self.render(container, function() {
-			var $self_queue = $('#'+args.id, container);
-			self.detail_stat(args.id, container);
-		});
 	}
-
-	/*activate: function(_container) {
-		var self = this,
-		container = _container || $('#monster-content');
-		container.empty();
-		self.current_queue_id = undefined;
-		self.hide_logout = false;
-		//TODO check render global data
-		self.render(container);
-	},*/
-
 	};
 
 	return app;
