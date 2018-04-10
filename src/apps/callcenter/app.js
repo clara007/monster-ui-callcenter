@@ -198,7 +198,7 @@ var app = {
 	showEavesdropPopup: function(mode, data) {
 		var self = this;
 
-		self.callApi({
+		self.getAll({
 			resource: 'device.list',
 			data: {
 				accountId: self.accountId,
@@ -269,8 +269,6 @@ var app = {
 	},*/
 
 	poll_agents: function (global_data, _container) {
-		console.log('Poll agents. Data:');
-		console.log(global_data);
 		var self = this,
 			container = _container,
 			polling_interval = 6,
@@ -307,8 +305,6 @@ var app = {
 							}
 						},
 						function (err, results) {
-							console.log('Poll agents. Results:');
-							console.log(results);
 							data_template = self.format_live_data(data_template, {
 								agents_stats: results.agents_stats,
 								queues_stats: results.queues_stats,
@@ -320,7 +316,6 @@ var app = {
 				}
 			},
 			huge_poll = function () {
-				console.log('huge_poll');
 				if ($('#dashboard-content').size() === 0) {
 					self.clean_timers();
 				} else {
@@ -367,8 +362,6 @@ var app = {
 				generateError: false
 			},
 			success: function (data) {
-				console.log('Agents status response:');
-				console.log(data);
 				callback(data.data);
 			}
 		});
@@ -384,8 +377,6 @@ var app = {
 				generateError: false
 			},
 			success: function (data) {
-				console.log('Agents stats response:');
-				console.log(data);
 				callback(data.data);
 			}
 		});
@@ -408,7 +399,7 @@ var app = {
 	get_queues: function (callback) {
 		var self = this;
 
-		monster.request({
+		self.getAll({
 			resource: 'callcenter.queues.list',
 			data: {
 				accountId: self.accountId,
@@ -423,7 +414,7 @@ var app = {
 	get_agents: function (callback) {
 		var self = this;
 
-		monster.request({
+		self.getAll({
 			resource: 'callcenter.agents.list',
 			data: {
 				accountId: self.accountId,
@@ -597,7 +588,6 @@ var app = {
 	},
 
 	format_data: function(data) {
-		console.log('format data');
 		var self = this,
 			formatted_data = {};
 		/* Formatting Queues */
@@ -654,7 +644,6 @@ var app = {
 	},
 
 	dashboardRender: function($container) {
-		console.log('Dashboard - Render');
 		var self = this;
 
 		self.fetch_all_data(function(data) {
@@ -665,9 +654,6 @@ var app = {
 	},
 
 	dashboardUpdateAllData: function($container, data, queueId, callback) {
-		console.log('Dashboard - Update all data');
-		console.log('Queue id:');
-		console.log(queueId);
 		var self = this;
 		$container = $container || $('#monster_content');
 
@@ -924,7 +910,7 @@ var app = {
 
 		monster.parallel({
 				users: function(callback) {
-					self.callApi({
+					self.getAll({
 						resource: 'user.list',
 						data: {
 							accountId: self.accountId,
@@ -936,7 +922,7 @@ var app = {
 					});
 				},
 				media: function(callback) {
-					self.callApi({
+					self.getAll({
 						resource: 'media.list',
 						data: {
 							accountId: self.accountId,
@@ -971,8 +957,6 @@ var app = {
 					}));
 
 					self.vars.users = results.users;
-					console.log('Users:');
-					console.log(results.users);
 
 					$container.empty().append(html);
 					self.settingsQueueFormBindEvents($container);
@@ -1019,11 +1003,6 @@ var app = {
 		for(var a=0, alen= selectedAgentsIdList.length; a<alen; a++) {
 			for(var u=0, ulen= usersList.length; u<ulen; u++) {
 				if(selectedAgentsIdList[a] === usersList[u].id) {
-					console.log('selectedAgentsIdList[a]:');
-					console.log(selectedAgentsIdList[a]);
-
-					console.log('usersList[u]:');
-					console.log(usersList[u]);
 					agentsList.push(usersList[u]);
 					break;
 				}
@@ -1113,9 +1092,6 @@ var app = {
 			}
 		});
 
-		console.log('self.vars.users:');
-		console.log(self.vars.users);
-
 		self.settingsQueueAgentsPanelRender(self.vars.users, agentsIdList, $('#queue-agents-wrapper'));
 	},
 
@@ -1158,9 +1134,6 @@ var app = {
 			var data = self.serializeFormElements($container.find('#queue-form'));
 			var queueId = $(this).data('queue-id');
 
-			console.log('Queue form data:');
-			console.log(data);
-
 			var agentsIdList = [];
 			$('#queue-agents-list').find('li[data-user-id]').each(function(i, el) {
 				var userId = $(el).data('user-id');
@@ -1170,12 +1143,7 @@ var app = {
 			});
 
 			self.settingsQueueSave(queueId, data, function(queueData) {
-				console.log('Queue was saved');
-				console.log(queueData);
 				self.settingsAgentsSave(queueData.id, agentsIdList, function(agentsIdList) {
-					console.log('Agents were saved');
-					console.log(agentsIdList);
-					console.log('Queue saving finished!');
 					self.settingsQueueAgentsPanelRender(self.vars.users, agentsIdList, $('#queue-agents-wrapper'));
 				});
 			});
@@ -1227,9 +1195,6 @@ var app = {
 				data: agentsIdList
 			},
 			success: function(data, status) {
-				console.log('Agents were saved.');
-				console.log(data.data.agents);
-
 				if(typeof(callback) === 'function') {
 					callback(data.data.agents);
 				}
@@ -1281,8 +1246,6 @@ var app = {
 					data: queueData
 				},
 				success: function(data, status) {
-					console.log(data);
-
 					self.settingsQueuesListRender(queueId, null, function() {
 						self.settingsQueueEditFormRender(queueId, function() {
 							var i18n = self.i18n.active();
@@ -1304,7 +1267,6 @@ var app = {
 					data: queueData
 				},
 				success: function(data, status) {
-					console.log(data);
 					self.settingsQueuesListRender(data.data.id, null, function() {
 						self.settingsQueueEditFormRender(data.data.id, function() {
 							var i18n = self.i18n.active();
@@ -1330,15 +1292,13 @@ var app = {
 			$parent = $('#queues-list-container');
 		}
 
-		monster.request({
+		self.getAll({
 			resource: 'callcenter.queues.list',
 			data: {
 				accountId: self.accountId,
 				generateError: false
 			},
 			success: function (data, status) {
-				console.log(data);
-
 				var i18n = self.i18n.active();
 
 				var map_crossbar_data = function(data) {
@@ -1385,10 +1345,7 @@ var app = {
 			var $queuesList = $(this).closest('#queues-list');
 			$queuesList.find('.active').removeClass('active');
 			$queuesList.find('.js-new-queue-item').remove();
-
 			var queueId = $(this).closest('li').addClass('active').data('id');
-			console.log('Edit queue: ' + queueId);
-
 			self.settingsQueueEditFormRender(queueId, function(){});
 		})
 
@@ -1410,8 +1367,6 @@ var app = {
 				queuesId: queueId
 			},
 			success: function(data, status) {
-				console.log(data);
-
 				var $parent = $('#cc-settings-content');
 				self.settingsQueueFormRender($parent, data.data, callback);
 			}
@@ -1419,7 +1374,6 @@ var app = {
 	},
 
 	fetch_all_data: function(callback) {
-		console.log('Fetch all data');
 		var self = this;
 
 		monster.parallel({
@@ -1529,19 +1483,13 @@ var app = {
 		$('.js-login-to-queue', container).click(function(e) {
 			e.preventDefault();
 
-			self.changeAgentInQueueStatus($(this), 'login', function(data) {
-				console.log('Agent login to queue');
-				console.log(data);
-			});
+			self.changeAgentInQueueStatus($(this), 'login', function(data) {});
 		});
 
 		$('.js-logout-from-queue', container).click(function(e) {
 			e.preventDefault();
 
-			self.changeAgentInQueueStatus($(this), 'logout', function(data) {
-				console.log('Agent logout from queue');
-				console.log(data);
-			});
+			self.changeAgentInQueueStatus($(this), 'logout', function(data) {});
 		});
 	},
 
@@ -1568,7 +1516,6 @@ var app = {
 				}
 			},
 			success: function (data) {
-				console.log(data);
 				if(typeof(callback) === 'function') {
 					callback(data);
 				}
@@ -1632,8 +1579,52 @@ var app = {
 		});
 
 		self.map_timers = {};
+	},
+
+	getAll: function(callApiData, startKey, continueData) {
+		// Warning! Method works for listed data only!
+
+		continueData = continueData || { data:[] };
+		var self = this;
+
+		if(typeof(callApiData.resource) === 'undefined') {
+			self.log('Error! Api keyword is undefined');
+			return;
+		}
+
+		var requestData = $.extend({
+			accountId: self.accountId,
+			generateError: false
+		}, callApiData.data || {});
+
+		if(typeof(startKey) !== 'undefined') {
+			requestData.startKey = startKey;
+		}
+
+		var newRequestData = {
+			resource: callApiData.resource,
+			data: requestData,
+			success: function(response){
+				response.data = $.merge(continueData.data, response.data);
+				if(response.next_start_key && startKey !== response.next_start_key) {
+					self.getAll(callApiData, response.next_start_key, response);
+					return;
+				}
+
+				if(typeof(callApiData.success) === 'function') {
+					callApiData.success(response);
+				}
+			},
+			error: callApiData.error || function(){}
+		};
+
+		if(self.requests.hasOwnProperty(callApiData.resource)) {
+			monster.request(newRequestData);
+		} else {
+			self.callApi(newRequestData);
+		}
 	}
-	};
+};
 
 	return app;
 });
