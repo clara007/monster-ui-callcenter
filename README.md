@@ -1,5 +1,7 @@
 # Monster UI Call Center (Cloudbased Callcenter GUI)
 
+Requires [Monster UI v.4.2](https://github.com/2600hz/monster-ui)
+
 #### Manual installation (to source files):
 1. Upload files from directory `src` to directory with source files of your Monster UI (*near the folders "apps", "css" and "js"*)
 2. Add next strings to `/src/js/main.js` after `paths: {`:
