@@ -41,6 +41,7 @@
 					<div class="row_data call">
 						{{#compare status "===" 'handling'}}
 							{{#if current_call}}
+								<span class="data_title">{{current_call.friendly_title}}</span>
 								<div class="data_title agent_text">{{ @root.i18n.callcenter.current_call }}</div>
 								<a title="{{ @root.i18n.callcenter.eavesdropTooltip }}" class="btn js-eavesdrop eavesdrop-call" data-call_id="{{current_call.call_id}}" href="">
 									<i class="fa fa-headphones"></i>

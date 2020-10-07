@@ -75,6 +75,10 @@ var app = {
 			'verb': 'POST',
 			'url': 'accounts/{accountId}/agents/{agentId}/status'
 		},
+		/*'callcenter.agents.toggle': {
+                        'verb': 'POST',
+                        'url': 'accounts/{accountId}/agents/{agentId}/queue_status'
+                },*/
 		'callcenter.agents.list': {
 			'verb': 'GET',
 			'url': 'accounts/{accountId}/agents'
@@ -166,6 +170,7 @@ var app = {
 
 		$headerMenu.find('.js-header-menu-title').on('click', function(e) {
 			e.preventDefault();
+                       
 			$(this).hide();
 			$headerMenu.find('.js-header-menu-items').show();
 
@@ -213,6 +218,7 @@ var app = {
 
 				$('#ring', popup_html).click(function(e) {
 					e.preventDefault();
+                                       
 
 					var requestData = {
 						accountId: self.accountId,
@@ -243,6 +249,7 @@ var app = {
 
 				$('#cancel', popup_html).click(function(e) {
 					e.preventDefault();
+                                        
 					popup.dialog('close');
 				});
 
@@ -463,7 +470,9 @@ var app = {
 		});
 
 		if(data.agents_status) {
-			$.each(data.agents_status, function(k, agent_status) {
+			$.each(data.agents_status, function(k, agent_statuses) {
+				var array_agent_statuses = Object.values(agent_statuses); //i added this
+				var agent_status = array_agent_statuses[0]; //i added this
 				if(k in formatted_data.agents) {
 					if(agent_status.status === 'outbound') {
 						agent_status.status = 'busy';
@@ -796,6 +805,7 @@ var app = {
 
 		$container.find('.js-open-cc-settings').on('click', function(e) {
 			e.preventDefault();
+                        
 			self.settingsRender($container, function(){
 				// Open first queue
 				$('#queues-list li:first-child a').click();
@@ -870,11 +880,13 @@ var app = {
 
 		$container.find('.js-open-cc-dashboard').on('click', function(e) {
 			e.preventDefault();
+                        
 			self.render($container);
 		});
 
 		$container.find('.js-cc-create-queue').on('click', function(e) {
 			e.preventDefault();
+                        
 			self.settingsQueueNewInit($container);
 		});
 	},
@@ -897,9 +909,9 @@ var app = {
 		var self = this;
 
 		var defaultQueueData = {
-			connection_timeout: '0',
+			connection_timeout: '60',
 			member_timeout: '5',
-			agent_wrapup_time: '30',
+			agent_wrapup_time: '0',
 			record_caller: false,
 			moh: {},
 			notifications: {},
@@ -1045,12 +1057,14 @@ var app = {
 
 		$parent.find('.js-remove-agent').not('.js-handled').on('click', function(e) {
 			e.preventDefault();
+                        
 			$(this).closest('li').remove();
 			self.settingsQueueAgentsPanelUpdateUserTable();
 		}).addClass(handledClass);
 
 		$parent.find('.js-add-agent').not('.js-handled').on('click', function(e) {
 			e.preventDefault();
+                        
 
 			var $userContainer = $(this).closest('tr');
 			var userId = $userContainer.data('user-id');
@@ -1130,6 +1144,7 @@ var app = {
 
 		$container.find('.js-save-queue').on('click', function(e) {
 			e.preventDefault();
+                        
 
 			var data = self.serializeFormElements($container.find('#queue-form'));
 			var queueId = $(this).data('queue-id');
@@ -1152,6 +1167,7 @@ var app = {
 
 		$container.find('.js-delete-queue').on('click', function(e) {
 			e.preventDefault();
+                        
 			var queueId = $(this).data('queue-id');
 
 			var i18n = self.i18n.active();
@@ -1341,6 +1357,7 @@ var app = {
 
 		$container.find('.js-select-queue').on('click', function(e) {
 			e.preventDefault();
+                       
 
 			var $queuesList = $(this).closest('#queues-list');
 			$queuesList.find('.active').removeClass('active');
@@ -1482,12 +1499,14 @@ var app = {
 
 		$('.js-login-to-queue', container).click(function(e) {
 			e.preventDefault();
+                        
 
 			self.changeAgentInQueueStatus($(this), 'login', function(data) {});
 		});
 
 		$('.js-logout-from-queue', container).click(function(e) {
 			e.preventDefault();
+                       
 
 			self.changeAgentInQueueStatus($(this), 'logout', function(data) {});
 		});
@@ -1495,6 +1514,7 @@ var app = {
 
 	changeAgentInQueueStatus: function($btn, status, callback) {
 		var self = this;
+		//console.log("the action is " + status + " and the queue_id is " + self.vars.queue_id);
 
 		if(status !== 'login' && status !== 'logout') {
 			console.log('Unknown agent status: ' + status);
@@ -1515,6 +1535,15 @@ var app = {
 					status: status
 				}
 			},
+			/*data: {
+                                accountId: self.accountId,
+                                agentId: agentId,
+                                generateError: false,
+                                data: {
+                                        action: status,
+					queue_id: self.vars.queue_id 
+                                }
+                        },*/
 			success: function (data) {
 				if(typeof(callback) === 'function') {
 					callback(data);

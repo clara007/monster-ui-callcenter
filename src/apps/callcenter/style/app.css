@@ -200,7 +200,13 @@
 	color: #ff3322;
 }
 
+#dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box .orange {
+        color: #ffa500;
+}
+
+
 #dashboard-content #dashboard-topbar .topbar-right .list_queues .list_queues_inner > li .box .blue {
+	color: #22A5FF;
 	font-weight: bold;
 }
 
@@ -263,7 +269,7 @@
 	padding-top: 20px;
 }
 
-#dashboard-content .dashboard-bottom-right #agents-view.hide-logout .agent_wrapper.logged_out {
+#dashboard-content .dashboard-bottom-right #agents-view.hide-logout .agent_wrapper .logged_out {
 	display: none !important;
 }
 
@@ -378,7 +384,7 @@
 }
 
 #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.ready .agent_header_badge, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.paused .agent_header_badge, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.busy .agent_header_badge, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.connecting .agent_header_badge, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.wrapup .agent_header_badge, #dashboard-content .dashboard-bottom-right #agents-view .agent_wrapper.handling .agent_header_badge {
-	border-width: 2px;
+	border-width: 20px;
 	border-color: white;
 	color: #555;
 }

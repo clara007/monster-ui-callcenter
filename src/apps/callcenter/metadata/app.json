@@ -115,7 +115,7 @@
 		"carrier",
 		"developer"
 	],
-	"api_url": "http://kazoo.allip.ovh:8443/v2",
+	"api_url": "https://broadbounds.com:8443/v2",
 	"icon": "Callcenter_app.png",
 	"author": "2600Hz",
 	"version": "1.0",
