@@ -1,0 +1,45 @@
+<div>
+	<div class="list_queues">
+		<ul class="js-queues-list list_queues_inner">
+			{{#each queues}}
+				<li id="{{id}}" data-current_calls="{{current_calls}}" data-total_calls="{{total_calls}}">
+					<div class="box_title">
+						<a title="{{ @root.i18n.callcenter.eavesdropTooltip }}" class="btn js-eavesdrop eavesdrop_queue tech_support" style="display: none;" rel="popover">
+							<i class="fa fa-headphones"></i>
+						</a>
+						<span class="box_title_text">{{name}}</span>
+						<a title="{{ @root.i18n.callcenter.settings.editQueueTitle }}" class="btn js-edit-queue edit_queue wrench_screw" style="display: none;" rel="popover" data-content="{{clicking_here_will_send_you}}">
+							<i class="fa fa-cog"></i>
+						</a>
+					</div>
+					<div class="grid_bottom">
+						<div class="first_row">
+							<div class="box calls">
+								<div class="icon_wrapper"><span class="fa fa-volume-control-phone"></span></div>
+								<div class="stat" title="{{ @root.i18n.callcenter.busy }}">
+									<span class="blue">{{current_calls}}</span> / {{total_calls}}
+								</div>
+							</div>
+							<div class="box users">
+								<div class="icon_wrapper"><span class="fa fa-users"></span></div>
+								<div class="stat">
+									<span class="blue">{{current_agents}}</span> / {{max_agents}}
+								</div>
+							</div>
+						</div>
+						<div class="second_row">
+							<div class="box dropped_calls" title="{{ @root.i18n.callcenter.missed_calls }}">
+								<div class="icon_wrapper"><span class="fa fa-thumbs-o-down"></span></div>
+								<div class="red">{{abandoned_calls}}</div>
+							</div>
+							<div class="box hold_time">
+								<div class="icon_wrapper"><span class="fa fa-hand-paper-o"></span></div>
+								<div class="orange">{{average_hold_time}}</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+</div>

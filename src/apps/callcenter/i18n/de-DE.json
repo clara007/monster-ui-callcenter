@@ -1,0 +1,91 @@
+{
+	"callcenter": {
+		"hide_logged_out_agents": "abgemeldete Agenten ausblenden",
+		"hide_queues": "Anrufschleifen ausblenden",
+		"break_time": "Wartezeit",
+		"wrapping_up": "Abschluss",
+		"call_time": "Sprechzeit",
+		"busy_since": "Beschäftigt",
+		"total_calls": "Anrufe",
+		"missed_calls": "Verpasst",
+		"no_active_call": "Inaktiv",
+		"current_call": "Akiv",
+		"select_the_device": "Wählen Sie das Gerät das angerufen werden soll",
+		"which_device": "Welches Gerät?",
+		"ring": "klingeln",
+		"cancel": "Abbrechen",
+		"call_waiting": "Wartende Anrufe",
+		"call_waiting_log": "Anklopf Aufzeichnung",
+		"eavesdrop_request_failed": "Antrag gescheitert. Fehler:",
+		"devices_title": "Geräte",
+		"hide_queues_html": "Warteräume ausblenden",
+		"show_queues_html": "Warteräume anzeigen",
+		"eavesdropTooltip": "Eavesdrop",
+		"eavesdropPopup": {
+			"deviceLabel": "Device",
+			"callBtnText": "klingeln",
+			"cancelBtnText": "Abbrechen"
+		},
+		"settings": {
+			"sidebar": {
+				"title": "Queues"
+			},
+			"editQueueTitle": "Edit Queue",
+			"createQueueTitle": "Create Queue",
+			"agentsPanel": {
+				"title": "Agents",
+				"selected": "Selected",
+				"noDataText": "None",
+				"actionsColumnHeader": "Add",
+				"userNameColumnHeader": "User Name"
+			},
+			"queuePanel": {
+				"title": "Queue settings",
+				"nameLabel": "Name",
+				"nameHelpText": "Friendly name for this Queue",
+				"callRecordingLabel": "Call Recording",
+				"callRecordingHelpText": "You can also change individual agent's recording settings under the Agent's section",
+				"musicOnHoldLabel": "Music on Hold",
+				"musicOnHoldHelpText": "Select the media file that you want to be played by default when it's not set on a user or a device.",
+				"strategyLabel": "Strategy",
+				"strategyRoundRobin": "Round Robin",
+				"strategyMostIdle": "Most Idle",
+				"callRecordingUrlLabel": "Call Recording URL",
+				"callRecordingUrlHelpText": "URL pointing to a server that will host the recording of the calls processed by this queue.",
+				"wrapupTimeLabel": "Call Wrap-up Time (s)",
+				"wrapupTimeHelpText": "Automatic break time between calls for the agents in this queue.",
+				"maxNumberCallsLabel": "Max Number of Calls",
+				"maxNumberCallsHelpText": "How many callers are allowed to wait on hold in the queue (0 for no limit).",
+				"maxHoldTimeLabel": "Max Hold Time (s)",
+				"maxHoldTimeHelpText": "In seconds, how long to try to connect the caller before progressing past the queue callflow action (0 for no limit).",
+				"enterWhenEmptyLabel": "Allows a caller to enter this queue when no agents are available."
+			},
+			"notificationsPanel": {
+				"title": "Notifications settings",
+				"hangupLabel": "Notification on Hangup",
+				"hangupHelpText": "URL for a callback when the call ends to tell the customer on their own servers that a call has ended.",
+				"pickupLabel": "Notification after Pickup",
+				"pickupHelpText": "URL for a callback when the call is picked up to tell the customer on their own servers that a call has been picked up.",
+				"methodLabel": "Method",
+				"methodHelpText": "What HTTP method to use",
+				"methodOptionPost": "POST",
+				"methodOptionGet": "GET"
+			},
+			"saveQueueButtonText": "Save Changes",
+			"deleteQueueButtonText": "Delete Queue",
+			"createQueueButtonText": "Create",
+			"deleteQueueConfirmText": "Are you sure to remove this queue?",
+			"deleteQueueSuccessMessage": "Queue was successfully removed!",
+			"saveQueueSuccessMessage": "Saving complete!",
+			"createQueueSuccessMessage": "Creating complete!",
+			"queueDefaultName": "No name",
+			"mediaDefault": "Default",
+			"mediaSilence": "Silence"
+		},
+		"headerMenu": {
+			"mainBtnText": "Menu",
+			"dashboard": "Dashboard",
+			"manageQueues": "Manage Queues"
+		}
+	}
+}

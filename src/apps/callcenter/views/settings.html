@@ -1,0 +1,34 @@
+<div id="cc-header-menu" class="cc-header-menu">
+	<a class="js-header-menu-title header-menu-title" href="">
+		<i class="fa fa-bars icon-small"></i> {{ i18n.callcenter.headerMenu.mainBtnText }}
+	</a>
+	<ul class="js-header-menu-items cc-header-menu-list" style="display: none;">
+		<li>
+			<a href="" class="js-open-cc-dashboard btn">
+				<i class="fa fa-desktop icon-small"></i> {{ i18n.callcenter.headerMenu.dashboard }}
+			</a>
+		</li>
+		<li>
+			<span class="header-menu-badge">
+				<i class="fa fa-cog icon-small"></i> {{ i18n.callcenter.headerMenu.manageQueues }}
+			</span>
+		</li>
+	</ul>
+</div>
+<div id="cc-settings">
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="sidebar-list-panel span3 well">
+				<h4 class="sidebar-list-panel__header">
+					{{ i18n.callcenter.settings.sidebar.title }}
+					<a href="" class="js-cc-create-queue btn btn-round">
+						<i class="fa fa-plus icon-small"></i>
+					</a>
+				</h4>
+
+				<div id="queues-list-container"></div>
+			</div>
+			<div id="cc-settings-content" class="cc-settings-content span9"></div>
+		</div>
+	</div>
+</div>

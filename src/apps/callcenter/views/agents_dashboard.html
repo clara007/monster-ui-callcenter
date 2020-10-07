@@ -1,0 +1,111 @@
+<div>
+	<div id="agents-view" {{#if hide_logout}}class="hide-logout"{{/if}}>
+		{{#each agents}}
+			<div class="js-agent-item agent_wrapper {{status}}" id="{{id}}" data-queues="{{queues}}">
+				<div class="agent_header">
+					<span class="fa fa-user"/>
+					{{first_name}} {{last_name}}
+					<span class="agent_header_badge">{{status}}</span>
+				</div>
+				<div class="agent_data">
+					<div class="row_data call_time js-call-time">
+						{{#compare status "===" "paused"}}
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.break_time }}</div>
+							<div class="js-time-value data_value">{{call_time}}</div>
+						{{/compare}}
+						{{#compare status "===" 'wrapup'}}
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.wrapping_up }}</div>
+							<div class="js-time-value data_value">{{call_time}}</div>
+						{{/compare}}
+						{{#compare status "===" 'handling'}}
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.call_time }}</div>
+							<div class="js-time-value data_value">{{call_time}}</div>
+						{{/compare}}
+						{{#compare status "===" 'busy'}}
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.busy_since }}</div>
+							<div class="js-time-value data_value">{{call_time}}</div>
+						{{/compare}}
+						{{#compare status "===" 'ready'}}
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.call_time }}</div>
+							<div class="js-time-value data_value">-</div>
+						{{/compare}}
+						{{#compare status "===" 'logged_out'}}
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.call_time }}</div>
+							<div class="js-time-value data_value">-</div>
+						{{/compare}}
+						{{#compare status "===" 'logged_in'}}
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.call_time }}</div>
+							<div class="js-time-value data_value">-</div>
+						{{/compare}}
+					</div>
+					<div class="row_data call">
+						{{#compare status "===" 'handling'}}
+							{{#if current_call}}
+								<span class="data_title">{{current_call.friendly_title}}</span>
+								<div class="data_title agent_text">{{ @root.i18n.callcenter.current_call }}</div>
+								<a title="{{ @root.i18n.callcenter.eavesdropTooltip }}" class="btn js-eavesdrop eavesdrop-call" data-call_id="{{current_call.call_id}}" href="">
+									<i class="fa fa-headphones"></i>
+								</a>
+							{{else}}
+								<div class="data_title agent_text">{{ @root.i18n.callcenter.no_active_call }}</div>
+							{{/if}}
+						{{/compare}}
+						{{#compare status "===" 'connecting'}}
+							{{#if current_call}}
+								<div class="data_title agent_text">{{ @root.i18n.callcenter.current_call }}</div>
+							{{else}}
+								<div class="data_title agent_text">{{ @root.i18n.callcenter.no_active_call }}</div>
+							{{/if}}
+						{{/compare}}
+						{{#compare status "!==" 'connecting' }}
+							{{#compare status "!==" 'handling'}}
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.no_active_call }}</div>
+							{{/compare}}
+						{{/compare}}
+					</div>
+					<div class="all_data">
+						<div class="row_data call_hours">
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.total_calls }}</div>
+							<div class="data_value">{{total_calls}}</div>
+						</div>
+						<div class="row_data call_day">
+							<div class="data_title agent_text">{{ @root.i18n.callcenter.missed_calls }}</div>
+							<div class="data_value">{{missed_calls}}</div>
+						</div>
+					</div>
+					<div class="queue_data" style="display: none;">
+						{{#each queues_list}}
+							<div class="queue_stat" data-id="{{id}}">
+								<div class="row_data call_hours">
+									<div class="data_title agent_text">{{ @root.i18n.callcenter.total_calls }}</div>
+									<div class="data_value">{{total_calls}}</div>
+								</div>
+								<div class="row_data call_day">
+									<div class="data_title agent_text">{{ @root.i18n.callcenter.missed_calls }}</div>
+									<div class="data_value">{{missed_calls}}</div>
+								</div>
+							</div>
+						{{/each}}
+						<div class="buttons-wrapper">
+							{{#compare status "===" 'ready'}}
+								<button class="btn btn-logout js-logout-from-queue">
+									<i class="fa fa-sign-out icon-small"></i>
+									Logout
+								</button>
+							{{/compare}}
+							{{#compare status "===" 'logged_out'}}
+								<button class="btn btn-login js-login-to-queue">
+									<i class="fa fa-sign-in icon-small"></i>
+									Login
+								</button>
+							{{/compare}}
+							{{#compare status "===" 'logged_in'}}
+								<span class="preloader"></span>
+							{{/compare}}
+						</div>
+					</div>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+</div>

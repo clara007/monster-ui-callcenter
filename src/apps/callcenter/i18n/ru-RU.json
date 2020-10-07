@@ -1,0 +1,91 @@
+{
+	"callcenter": {
+		"hide_logged_out_agents": "Скрыть операторов, не зарегистрированных в системе",
+		"hide_queues": "Скрыть очереди",
+		"break_time": "Время паузы",
+		"wrapping_up": "Закругление",
+		"call_time": "Время звонка",
+		"busy_since": "Разговаривает с",
+		"no_active_call": "Нет активного звонка...",
+		"total_calls": "Всего звонков",
+		"missed_calls": "Всего пропущено",
+		"clicking_here_will_send_you": "Нажатие здесь отправит вас на страницу редактирования очереди, где вы сможете обновить настройки этой очереди, управлять операторами очереди и смотреть отчёты.",
+		"select_the_device": "Выберите устройство для звонка",
+		"which_device": "Какое устройство?",
+		"ring": "Звонить",
+		"cancel": "Отмена",
+		"call_waiting_log": "Журнал ожидающих вызовов...",
+		"eavesdrop_request_failed": "Попытка присоединения не удалась. Ошибка #",
+		"devices_title": "Устройства",
+		"hide_queues_html": "Скрыть очереди",
+		"show_queues_html": "Показать очереди",
+		"eavesdropTooltip": "Eavesdrop",
+		"eavesdropPopup": {
+			"deviceLabel": "Device",
+			"callBtnText": "Call",
+			"cancelBtnText": "Cancel"
+		},
+		"settings": {
+			"sidebar": {
+				"title": "Очереди"
+			},
+			"editQueueTitle": "Редактировать очередь",
+			"createQueueTitle": "Создать очередь",
+			"agentsPanel": {
+				"title": "Агенты",
+				"selected": "Выбранные",
+				"noDataText": "Не найдено",
+				"actionsColumnHeader": "Добавить",
+				"userNameColumnHeader": "Имя"
+			},
+			"queuePanel": {
+				"title": "Настройки очереди",
+				"nameLabel": "Имя",
+				"nameHelpText": "Имя очереди в свободной форме",
+				"callRecordingLabel": "Запись звонков",
+				"callRecordingHelpText": "",
+				"musicOnHoldLabel": "Музыка при удержании вызова",
+				"musicOnHoldHelpText": "Выберите медиафайл",
+				"strategyLabel": "Стратегия",
+				"strategyRoundRobin": "Циклический алгоритм (Round Robin)",
+				"strategyMostIdle": "Простой",
+				"callRecordingUrlLabel": "URL для записи звонков",
+				"callRecordingUrlHelpText": "URL-адрес, указывающий на сервер, на котором будет выполняться запись вызовов, обрабатываемых этой очередью.",
+				"wrapupTimeLabel": "Время отсрочки вызова (в секундах)",
+				"wrapupTimeHelpText": "Автоматическое время перерыва между вызовами агентов в этой очереди.",
+				"maxNumberCallsLabel": "Максимальное количество вызовов",
+				"maxNumberCallsHelpText": "Сколько абонентов могут ждать в очереди в очереди (0 - без ограничений)",
+				"maxHoldTimeLabel": "Максимальное время удержания (в секундах)",
+				"maxHoldTimeHelpText": "В секундах, как долго пытаться подключить вызывающего абонента до того, как он перейдёт к следующим действиям очереди (0 - без ограничений).",
+				"enterWhenEmptyLabel": "Позволить вызывающему абоненту войти в эту очередь, когда агенты недоступны."
+
+			},
+			"notificationsPanel": {
+				"title": "Настройки уведомлений",
+				"hangupLabel": "Уведомление о завершении вызова",
+				"hangupHelpText": "URL-адрес для обратного вызова, когда завершается вызов, чтобы сообщить клиенту на своих серверах, что вызов закончился.",
+				"pickupLabel": "Уведомление после отправки",
+				"pickupHelpText": "URL-адрес для обратного вызова, когда вызов выбран, чтобы сообщить клиенту на своих серверах, что вызов был поднят.",
+				"methodLabel": "Метод",
+				"methodHelpText": "Какой HTTP-метод использовать",
+				"methodOptionPost": "POST",
+				"methodOptionGet": "GET"
+			},
+			"saveQueueButtonText": "Сохранить изменения",
+			"deleteQueueButtonText": "Удалить очередь",
+			"createQueueButtonText": "Создать очередь",
+			"deleteQueueConfirmText": "Вы действительно хотите удалить очередь?",
+			"deleteQueueSuccessMessage": "Очередь успешно удалена",
+			"saveQueueSuccessMessage": "Очередь сохранена",
+			"createQueueSuccessMessage": "Очередь успешно создана",
+			"queueDefaultName": "Без имени",
+			"mediaDefault": "По-умолчанию",
+			"mediaSilence": "Без звука"
+		},
+		"headerMenu": {
+			"mainBtnText": "Меню",
+			"dashboard": "Инфо-панель",
+			"manageQueues": "Редактировать очереди"
+		}
+	}
+}

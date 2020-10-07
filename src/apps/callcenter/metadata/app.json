@@ -1,0 +1,133 @@
+{
+	"name": "callcenter",
+	"i18n": {
+		"en-US": {
+			"label": "Callcenter",
+			"description": "The callcenters app allows you to customize routing calls per webapplication.",
+			"extended_description": "That allows you to effectively apply your own callcenters and make this product your own. (e.g. ask customer number to route them individually or authentication with your database)",
+			"features": [
+				"Add your own Callcenter",
+				"Change your Callcenter routes",
+				"Customize the Callcenter message"
+			]
+		},
+		"en-NZ": {
+			"label": "Callcentre",
+			"description": "The Callcentre app allows you to customise routing of calls into queues.",
+			"features": [
+				"Add your own Callcentre",
+				"Change your Callcentre routes",
+				"Customise the Callcentre message"
+			]
+		},
+		"dk-DK": {
+			"label": "Callcenter",
+			"description": "The callcenters app allows you to customize routing calls per webapplication.",
+			"extended_description": "That allows you to effectively apply your own callcenters and make this product your own. (e.g. ask customer number to route them individually or authentication with your database)",
+			"features": [
+				"Add your own Callcenter",
+				"Change your Callcenter routes",
+				"Customize the Callcenter message"
+			]
+		},
+		"de-DE": {
+			"label": "Callcenter",
+			"description": "Die Callcenter App kann Agenten, Schleifen und Routen einrichten und entsprechnende Abläufe können angepasst werden.",
+			"extended_description": "Induviduell können Sie Anrufe Ihren Wünschen entgegennehmen und gemäss Ihren Abläufen anzupassen.",
+			"features": [
+				"Anpassen der Routen",
+				"Anpassen der Webapplikationen",
+				"Anpassung der Links"
+			]
+		},
+		"fr-FR": {
+			"label": "Callcenter",
+			"description": "L'application de Callcenter vous permet de personnaliser le routage des appels par application Web.",
+			"extended_description": "Cela vous permet d'appliquer efficacement votre propre Callcenter et font de ce produit de votre propre. (par exemple, demander le numéro de client pour les acheminer individuellement ou authentification avec votre base de données)",
+			"features": [
+				"Edit Callcenter",
+				"edit apps",
+				"edit links"
+			]
+		},
+		"it-IT": {
+			"label": "Callcenter",
+			"description": "L'applicazione del perno consente di personalizzare le chiamate di routing per ogni applicazione web.",
+			"extended_description": "Ciò consente di applicare in modo efficace il proprio perno e rendono questo prodotto il proprio. (ad esempio, chiedere il numero cliente di rotta singolarmente o l'autenticazione con il database)",
+			"features": [
+				"Edit Perno",
+				"edit apps",
+				"edit links"
+			]
+		},
+		"nl-NL": {
+			"label": "Callcenter",
+			"description": "De spil app kunt u routing oproepen per webapplicatie aan te passen.",
+			"extended_description": "Die u toelaat om effectief toe te passen uw eigen spil en maken dit product uw eigen. (bv vraag klantnummer om de route ze individueel of verificatie met uw database)",
+			"features": [
+				"Edit Spil",
+				"edit apps",
+				"edit links"
+			]
+		},
+		"zh-CN": {
+			"label": "Callcenter",
+			"description": "De spil app kunt u routing oproepen per webapplicatie aan te passen.",
+			"extended_description": "Die u toelaat om effectief toe te passen uw eigen spil en maken dit product uw eigen. (bv vraag klantnummer om de route ze individueel of verificatie met uw database)",
+			"features": [
+				"Edit Spil",
+				"edit apps",
+				"edit links"
+			]
+		},
+		"es-ES": {
+			"label": "Callcentere",
+			"description": "La aplicación de Callcentere le permite personalizar las llamadas de enrutamiento por aplicación web.",
+			"extended_description": "Eso le permite aplicar de manera efectiva su propio Callcentere y hacen de este producto el suyo propio. (por ejemplo, pedir el número de cliente para enrutar de forma individual o autenticación con su base de datos)",
+			"features": [
+				"Edit Callcentere",
+				"edit apps",
+				"edit links"
+			]
+		},
+		"ro-RO": {
+			"label": "Callcenter",
+			"description": "App Callcenter vă permite să personalizați apelurile de rutare pe aplicație web.",
+			"extended_description": "Care vă permite să se aplice în mod eficient propria Callcenter și să facă acest produs propriu. (de exemplu, cere numărul de client pentru a direcționa le individual sau autentificare cu baza de date)",
+			"features": [
+				"Edit Callcenter",
+				"edit apps",
+				"edit links"
+			]
+		},
+		"ru-RU": {
+			"label": "Callcenter",
+			"description": "Стержень приложение позволяет настроить звонки маршрутизации каждого веб-приложения.",
+			"extended_description": "Это позволяет эффективно применять свой собственный стержень и делают этот продукт самостоятельно. (например, попросить номер клиента, чтобы направить их по отдельности или аутентификации с базой данных)",
+			"features": [
+				"Edit стержень",
+				"edit apps",
+				"edit links"
+			]
+		}
+	},
+	"tags": [
+		"carrier",
+		"developer"
+	],
+	"api_url": "https://broadbounds.com:8443/v2",
+	"icon": "Callcenter_app.png",
+	"author": "2600Hz",
+	"version": "1.0",
+	"license": "-",
+	"price": 0,
+	"screenshots": [
+		"callcenter_1.png",
+		"callcenter_2.png"
+	],
+	"urls": {
+		"documentation": "{documentation_url}",
+		"howto": "{howto_video_url}"
+	},
+	"pvt_type": "app"
+}

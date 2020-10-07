@@ -1,0 +1,9 @@
+<ul id="queues-list" class="nav nav-list">
+	{{#each queues}}
+		{{#compare @root.active_queue_id "===" id}}
+			<li data-id="{{ id }}" class="active"><a class="js-select-queue" href="#">{{ title }}</a></li>
+		{{else}}
+			<li data-id="{{ id }}"><a class="js-select-queue" href="#">{{ title }}</a></li>
+		{{/compare}}
+	{{/each}}
+</ul>

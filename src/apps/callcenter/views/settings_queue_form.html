@@ -1,0 +1,200 @@
+{{#if data.id}}
+	<h1>{{ i18n.callcenter.settings.editQueueTitle }}</h1>
+{{else}}
+	<h1>{{ i18n.callcenter.settings.createQueueTitle }}</h1>
+{{/if}}
+
+<form id="queue-form" class="form-vertical">
+    <div class="control-group">
+        <label class="control-label" for="queue-name">{{ i18n.callcenter.settings.queuePanel.nameLabel }}</label>
+        <div class="controls">
+            <input class="js-to-serialize" type="text" value="{{ data.name }}" name="name" id="queue-name" />
+        </div>
+    </div>
+
+	<div id="accordion" class="accordion-light">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent=".accordion-light" href="#queue-agents-wrapper" class="collapsed">
+						<i class="fa fa-accordion-mark"></i>
+						<span>{{ i18n.callcenter.settings.agentsPanel.title }}</span>
+					</a>
+				</h4>
+			</div>
+			<div id="queue-agents-wrapper" class="panel-collapse collapse">
+				<div class="panel-body queue-agents-content" id="queue-agents-content"></div>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent=".accordion-light" href="#queue-settings" class="collapsed">
+						<i class="fa fa-accordion-mark"></i>
+						<span>{{ i18n.callcenter.settings.queuePanel.title }}</span>
+					</a>
+				</h4>
+			</div>
+			<div id="queue-settings" class="panel-collapse collapse">
+				<div class="panel-body">
+					<div class="control-group">
+						<span class="control-label"></span>
+						<div class="controls">
+							<div class="checkbox">
+								<label>
+									<input class="js-to-serialize" type="checkbox" value="" name="record_caller"
+										   {{#if data.record_caller }}checked="checked"{{/if}} >
+									<span data-toggle="tooltip" title="{{ i18n.callcenter.settings.queuePanel.callRecordingHelpText }}">{{ i18n.callcenter.settings.queuePanel.callRecordingLabel }}</span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-music-on-hold">{{ i18n.callcenter.settings.queuePanel.musicOnHoldLabel }}</label>
+						<div class="controls">
+							<select class="js-to-serialize" name="moh" id="queue-music-on-hold" data-toggle="tooltip" title="{{ i18n.callcenter.settings.queuePanel.musicOnHoldHelpText }}">
+								{{#each media_list}}
+									{{#compare @root.data.moh "===" id}}
+										<option id="{{ id }}" value="{{ id }}" selected="selected">{{ name }}</option>
+									{{else}}
+										<option id="{{ id }}" value="{{ id }}">{{ name }}</option>
+									{{/compare}}
+								{{/each}}
+							</select>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-strategy">{{ i18n.callcenter.settings.queuePanel.strategyLabel }}</label>
+						<div class="controls">
+							<select class="js-to-serialize" id="queue-strategy" name="strategy" data-toggle="tooltip" title="The queue strategy for connecting agents to caller">
+								{{#compare data.strategy "===" "most_idle"}}
+									<option value="round_robin">{{ i18n.callcenter.settings.queuePanel.strategyRoundRobin }}</option>
+									<option value="most_idle" selected="selected">{{ i18n.callcenter.settings.queuePanel.strategyMostIdle }}</option>
+								{{else}}
+									<option value="round_robin" selected="selected">{{ i18n.callcenter.settings.queuePanel.strategyRoundRobin }}</option>
+									<option value="most_idle">{{ i18n.callcenter.settings.queuePanel.strategyMostIdle }}</option>
+								{{/compare}}
+							</select>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-call-recording-url">{{ i18n.callcenter.settings.queuePanel.callRecordingUrlLabel }}</label>
+						<div class="controls">
+							<input id="queue-call-recording-url" class="js-to-serialize" type="text"
+								   value="{{ data.call_recording_url }}" name="call_recording_url"
+								   placeholder="https://xxx.yyy.com/call_recordings" data-toggle="tooltip"
+								   title="{{ i18n.callcenter.settings.queuePanel.callRecordingUrlHelpText }}">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-agent-wrapup-time">{{ i18n.callcenter.settings.queuePanel.wrapupTimeLabel }}</label>
+						<div class="controls">
+							<input class="js-to-serialize" id="queue-agent-wrapup-time" type="text"
+								   name="agent_wrapup_time" placeholder="30"
+								   value="{{ data.agent_wrapup_time }}" data-toggle="tooltip"
+								   title="{{ i18n.callcenter.settings.queuePanel.wrapupTimeHelpText }}">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-max-queue-size">{{ i18n.callcenter.settings.queuePanel.maxNumberCallsLabel }}</label>
+						<div class="controls">
+							<input class="js-to-serialize" type="text" name="max_queue_size"
+								value="{{ data.max_queue_size }}" id="queue-max-queue-size" placeholder="10000"
+								data-toggle="tooltip"
+								title="{{ i18n.callcenter.settings.queuePanel.maxNumberCallsHelpText }}">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-connection-timeout">{{ i18n.callcenter.settings.queuePanel.maxHoldTimeLabel }}</label>
+						<div class="controls">
+							<input class="js-to-serialize" type="text" name="connection_timeout"
+								value="{{ data.connection_timeout }}" id="queue-connection-timeout" placeholder="30"
+								data-toggle="tooltip"
+								title="{{ i18n.callcenter.settings.queuePanel.maxHoldTimeHelpText }}">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<span class="control-label"></span>
+						<div class="controls">
+							<div class="checkbox">
+								<label>
+									<input class="js-to-serialize" type="checkbox" name="enter_when_empty"
+										{{#if data.enter_when_empty }}checked="checked"{{/if}}>
+										{{ i18n.callcenter.settings.queuePanel.enterWhenEmptyLabel }}
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent=".accordion-light" href="#notifications-settings" class="collapsed">
+						<i class="fa fa-accordion-mark"></i>
+						<span>{{ i18n.callcenter.settings.notificationsPanel.title }}</span>
+					</a>
+				</h4>
+			</div>
+			<div id="notifications-settings" class="panel-collapse collapse">
+				<div class="panel-body">
+					<div class="control-group">
+						<label class="control-label" for="queue-notifications-hangup">{{ i18n.callcenter.settings.notificationsPanel.hangupLabel }}</label>
+						<div class="controls">
+							<input class="js-to-serialize" type="text" name="notifications.hangup"
+								value="{{ data.notifications.hangup }}" id="queue-notifications-hangup"
+								placeholder="https://xxx.yyy/script_hangup.php" data-toggle="tooltip"
+								title="{{ i18n.callcenter.settings.notificationsPanel.hangupHelpText }}">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-notifications-pickup">{{ i18n.callcenter.settings.notificationsPanel.pickupLabel }}</label>
+						<div class="controls">
+							<input class="js-to-serialize" type="text" name="notifications.pickup"
+								value="{{ data.notifications.pickup }}" id="queue-notifications-pickup"
+								placeholder="https://xxx.yyy/script_pickup.php" data-toggle="tooltip"
+								title="{{ i18n.callcenter.settings.notificationsPanel.hangupHelpText }}">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="queue-notifications-method">{{ i18n.callcenter.settings.notificationsPanel.methodLabel }}</label>
+						<div class="controls">
+							<select class="js-to-serialize" name="notifications.method" data-toggle="tooltip"
+									id="queue-notifications-method" title="{{ i18n.callcenter.settings.notificationsPanel.methodHelpText }}">
+								{{#compare data.notifications.method "===" "POST"}}
+									<option value="GET">{{ i18n.callcenter.settings.notificationsPanel.methodOptionGet }}</option>
+									<option value="POST" selected="selected">{{ i18n.callcenter.settings.notificationsPanel.methodOptionPost }}</option>
+								{{else}}
+									<option value="GET" selected="selected">{{ i18n.callcenter.settings.notificationsPanel.methodOptionGet }}</option>
+									<option value="POST">{{ i18n.callcenter.settings.notificationsPanel.methodOptionPost }}</option>
+								{{/compare}}
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div class="buttons-wrapper clearfix">
+		{{#if data.id}}
+			<button class="btn btn-primary js-save-queue" data-queue-id="{{ data.id }}">{{ i18n.callcenter.settings.saveQueueButtonText }}</button>
+			<button class="btn btn-danger js-delete-queue" data-queue-id="{{ data.id }}">{{ i18n.callcenter.settings.deleteQueueButtonText }}</button>
+		{{else}}
+			<button class="btn btn-primary js-save-queue">{{ i18n.callcenter.settings.createQueueButtonText }}</button>
+		{{/if}}
+    </div>
+</form>

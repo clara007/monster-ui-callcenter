@@ -1,0 +1,43 @@
+<div class="row-fluid">
+	<div class="span4">
+		<div class="agents-list-wrapper well-list">
+			<h3>{{ i18n.callcenter.settings.agentsPanel.selected }}</h3>
+			<ul id="queue-agents-list">
+				{{#if this.agents}}
+					{{#each this.agents}}
+						<li data-user-id="{{ id }}">
+							<span class="item-name">{{ first_name }} {{ last_name }}</span>
+							<a href="#" class="js-remove-agent remove-agent-btn">
+								<i class="fa fa-remove"></i>
+							</a>
+						</li>
+					{{/each}}
+				{{else}}
+					<li class="js-empty-item empty-item">{{ i18n.callcenter.settings.agentsPanel.noDataText }}</li>
+				{{/if}}
+			</ul>
+		</div>
+	</div>
+	<div class="span8">
+		<table id="queue-users-table" class="table table-condensed table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="no-sort">{{ i18n.callcenter.settings.agentsPanel.actionsColumnHeader }}</th>
+					<th>{{ i18n.callcenter.settings.agentsPanel.userNameColumnHeader }}</th>
+				</tr>
+			</thead>
+			<tbody>
+			{{#each this.users}}
+			<tr data-user-id="{{ id }}">
+				<td class="actions-col">
+					<a href="#" class="mini-btn js-add-agent add-agent-btn">
+						<i class="fa fa-arrow-left"></i>
+					</a>
+				</td>
+				<td class="js-user-name">{{ first_name }} {{ last_name }}</td>
+			</tr>
+			{{/each}}
+			</tbody>
+		</table>
+	</div>
+</div>

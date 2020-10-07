@@ -1,0 +1,19 @@
+<ul>
+	{{#each waits}}
+	<li title="{{status}}" class="js-cw-item call-waiting-item" data-call_id="{{call_id}}" data-queue_id="{{queue_id}}">
+		<span data-module="activate" data-action="media">
+			<span class="cw-item-name">{{friendly_title}}</span>
+			<span class="js-timer cw-item-timer">{{friendly_duration}}</span>
+		</span>
+	</li>
+	{{/each}}
+
+	{{#each progress}}
+	<li title="{{status}}" class="js-cw-item call-waiting-item" data-call_id="{{call_id}}" data-queue_id="{{queue_id}}">
+		<span data-module="activate" data-action="media">
+			<span class="cw-item-name">{{friendly_title}}</span>
+			<span class="js-timer cw-item-timer">{{friendly_duration}}</span>
+		</span>
+	</li>
+	{{/each}}
+</ul>
